@@ -3,7 +3,9 @@ package repository
 import (
 	"fmt"
 	"github.com/Max425/manager/internal/config"
+
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func NewPostgresDB(cfg config.PostgresConfig) (*sqlx.DB, error) {

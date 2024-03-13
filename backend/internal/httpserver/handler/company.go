@@ -28,17 +28,28 @@ func NewCompanyHandler(log *slog.Logger, companyService CompanyService) *Company
 	}
 }
 
+// CreateCompany создает новую компанию.
+// @Summary Создает новую компанию
+// @Description Создает новую компанию с заданными данными.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Param company body model.Company true "Данные компании"
+// @Success 200 {object} model.Company "Успешно создана компания"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies [post]
 func (h *CompanyHandler) CreateCompany(c *gin.Context) {
 	var company model.Company
 	if err := c.BindJSON(&company); err != nil {
-		h.log.Error("Error binding JSON", err)
+		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	result, err := h.companyService.CreateCompany(c.Request.Context(), company)
 	if err != nil {
-		h.log.Error("Error creating company", err)
+		h.log.Error("Error creating company", slog.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -46,17 +57,28 @@ func (h *CompanyHandler) CreateCompany(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// GetCompany возвращает информацию о компании по ее ID.
+// @Summary Возвращает информацию о компании по ID
+// @Description Возвращает информацию о компании по указанному ID.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Param id path int true "ID компании"
+// @Success 200 {object} model.Company "Успешно получена компания"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies/{id} [get]
 func (h *CompanyHandler) GetCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		h.log.Error("Error converting id", err)
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
 
 	company, err := h.companyService.GetCompanyByID(c.Request.Context(), id)
 	if err != nil {
-		h.log.Error("Error getting company", err)
+		h.log.Error("Error getting company", slog.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -64,24 +86,36 @@ func (h *CompanyHandler) GetCompany(c *gin.Context) {
 	c.JSON(http.StatusOK, company)
 }
 
+// UpdateCompany обновляет информацию о компании.
+// @Summary Обновляет информацию о компании
+// @Description Обновляет информацию о компании с указанным ID новыми данными.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Param id path int true "ID компании"
+// @Param company body model.Company true "Новые данные компании"
+// @Success 200 {object} model.Company "Успешно обновлена компания"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies/{id} [put]
 func (h *CompanyHandler) UpdateCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		h.log.Error("Error converting id", err)
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
 
 	var company model.Company
 	if err = c.BindJSON(&company); err != nil {
-		h.log.Error("Error binding JSON", err)
+		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	result, err := h.companyService.UpdateCompany(c.Request.Context(), id, company)
 	if err != nil {
-		h.log.Error("Error updating company", err)
+		h.log.Error("Error updating company", slog.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -89,17 +123,28 @@ func (h *CompanyHandler) UpdateCompany(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// DeleteCompany удаляет компанию по ее ID.
+// @Summary Удаляет компанию по ID
+// @Description Удаляет компанию с указанным ID.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Param id path int true "ID компании"
+// @Success 200 {object} string "Успешное удаление компании"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies/{id} [delete]
 func (h *CompanyHandler) DeleteCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		h.log.Error("Error converting id", err)
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
 
 	err = h.companyService.DeleteCompany(c.Request.Context(), id)
 	if err != nil {
-		h.log.Error("Error deleting company", err)
+		h.log.Error("Error deleting company", slog.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

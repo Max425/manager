@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Web application for automatic compilation of project teams",
+        "title": "Manager API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "paths": {
+        "/api/companies": {
+            "post": {
+                "description": "Создает новую компанию с заданными данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Создает новую компанию",
+                "parameters": [
+                    {
+                        "description": "Данные компании",
+                        "name": "company",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Company"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно создана компания",
+                        "schema": {
+                            "$ref": "#/definitions/model.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/companies/{id}": {
+            "get": {
+                "description": "Возвращает информацию о компании по указанному ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Возвращает информацию о компании по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID компании",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена компания",
+                        "schema": {
+                            "$ref": "#/definitions/model.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Обновляет информацию о компании с указанным ID новыми данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Обновляет информацию о компании",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID компании",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Новые данные компании",
+                        "name": "company",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Company"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно обновлена компания",
+                        "schema": {
+                            "$ref": "#/definitions/model.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаляет компанию с указанным ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Удаляет компанию по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID компании",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное удаление компании",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Company": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "positions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

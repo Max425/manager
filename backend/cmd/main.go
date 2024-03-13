@@ -21,6 +21,12 @@ const (
 	envProd  = "prod"
 )
 
+// @title Manager API
+// @version 1.0
+// @description Web application for automatic compilation of project teams
+
+// @host localhost:8000
+// @BasePath /
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -37,7 +43,7 @@ func run() error {
 	// create http server with all handlers & services & repositories
 	srv, err := httpserver.NewHttpServer(logger, cfg.Postgres, cfg.HttpAddr)
 	if err != nil {
-		logger.Error("create http server: %s", err)
+		logger.Error("create http server", slog.Any("error", err))
 		return err
 	}
 
@@ -50,16 +56,16 @@ func run() error {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		if err = srv.Shutdown(ctx); err != nil {
-			logger.Error("HTTP Server Shutdown Error: %v", err)
+			logger.Error("HTTP Server Shutdown", slog.Any("error", err))
 		}
 		close(stopped)
 	}()
 
-	logger.Info("Starting HTTP server on %s", cfg.HttpAddr)
+	logger.Info("Starting HTTP server", slog.String("addr", cfg.HttpAddr))
 
 	// start HTTP server
 	if err = srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-		logger.Error("HTTP server ListenAndServe Error: %v", err)
+		logger.Error("HTTP server ListenAndServe", slog.Any("error", err))
 	}
 
 	<-stopped

@@ -4,11 +4,14 @@ import (
 	"github.com/Max425/manager/internal/config"
 	"github.com/Max425/manager/internal/httpserver/handler"
 	"github.com/Max425/manager/internal/httpserver/repository"
-	service "github.com/Max425/manager/internal/httpserver/services"
+	"github.com/Max425/manager/internal/httpserver/services"
 	"github.com/gin-gonic/gin"
-	sloggin "github.com/samber/slog-gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 	"log/slog"
 	"net/http"
+
+	_ "github.com/Max425/manager/docs"
 )
 
 type Service interface {
@@ -29,8 +32,9 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 	managerService := service.NewService(managerRepo)
 
 	router := gin.New()
-	gin.Default()
-	router.Use(sloggin.New(log), gin.Recovery())
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.Use(gin.Logger(), gin.Recovery())
 
 	companyHandler := handler.NewCompanyHandler(log, managerService)
 
