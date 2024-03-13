@@ -1,5 +1,9 @@
-port: "8000"
 env: "local"
+
+server:
+  host: "localhost"
+  port: "8000"
+
 db:
   username: "postgres"
   host: "localhost"

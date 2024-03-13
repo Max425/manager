@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"log"
@@ -8,8 +9,9 @@ import (
 )
 
 type Config struct {
-	Env      string
 	Postgres PostgresConfig
+	Env      string
+	HttpAddr string
 }
 
 type PostgresConfig struct {
@@ -37,8 +39,7 @@ func MustLoad() *Config {
 
 func newConfig() *Config {
 	return &Config{
-		viper.GetString("env"),
-		PostgresConfig{
+		Postgres: PostgresConfig{
 			Host:     viper.GetString("db.host"),
 			Port:     viper.GetString("db.port"),
 			Username: viper.GetString("db.username"),
@@ -46,5 +47,7 @@ func newConfig() *Config {
 			SSLMode:  viper.GetString("db.sslmode"),
 			Password: viper.GetString("db.password"),
 		},
+		Env:      viper.GetString("env"),
+		HttpAddr: fmt.Sprintf("%s:%s", viper.GetString("server.host"), viper.GetString("server.port")),
 	}
 }

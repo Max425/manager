@@ -1,12 +1,18 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"github.com/Max425/manager/internal/config"
+	"github.com/Max425/manager/internal/httpserver"
 	"github.com/Max425/manager/internal/lib/logger/handlers/slogpretty"
+	"log"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 const (
@@ -16,44 +22,68 @@ const (
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+	os.Exit(0)
+}
+
+func run() error {
+	// read config
 	cfg := config.MustLoad()
 
-	log := setupLogger(cfg.Env)
+	logger := setupLogger(cfg.Env)
 
-	//application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
-	//
-	//go func() {
-	//	application.GRPCServer.MustRun()
-	//}()
+	// create http server with all handlers & services & repositories
+	srv, err := httpserver.NewHttpServer(logger, cfg.Postgres, cfg.HttpAddr)
+	if err != nil {
+		logger.Error("create http server: %s", err)
+		return err
+	}
 
-	// Graceful shutdown
+	// listen to OS signals and gracefully shutdown HTTP server
+	stopped := make(chan struct{})
+	go func() {
+		sigint := make(chan os.Signal, 1)
+		signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+		<-sigint
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err = srv.Shutdown(ctx); err != nil {
+			logger.Error("HTTP Server Shutdown Error: %v", err)
+		}
+		close(stopped)
+	}()
 
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+	logger.Info("Starting HTTP server on %s", cfg.HttpAddr)
 
-	<-stop
+	// start HTTP server
+	if err = srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+		logger.Error("HTTP server ListenAndServe Error: %v", err)
+	}
 
-	//application.GRPCServer.Stop()
-	log.Info("Gracefully stopped")
+	<-stopped
+
+	return nil
 }
 
 func setupLogger(env string) *slog.Logger {
-	var log *slog.Logger
+	var logger *slog.Logger
 
 	switch env {
 	case envLocal:
-		log = setupPrettySlog()
+		logger = setupPrettySlog()
 	case envDev:
-		log = slog.New(
+		logger = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
 		)
 	case envProd:
-		log = slog.New(
+		logger = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
 		)
 	}
 
-	return log
+	return logger
 }
 
 func setupPrettySlog() *slog.Logger {
