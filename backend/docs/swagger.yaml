@@ -1,0 +1,146 @@
+basePath: /
+definitions:
+  model.Company:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      positions:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Web application for automatic compilation of project teams
+  title: Manager API
+  version: "1.0"
+paths:
+  /api/companies:
+    post:
+      consumes:
+      - application/json
+      description: Создает новую компанию с заданными данными.
+      parameters:
+      - description: Данные компании
+        in: body
+        name: company
+        required: true
+        schema:
+          $ref: '#/definitions/model.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно создана компания
+          schema:
+            $ref: '#/definitions/model.Company'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создает новую компанию
+      tags:
+      - Company
+  /api/companies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет компанию с указанным ID.
+      parameters:
+      - description: ID компании
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление компании
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удаляет компанию по ID
+      tags:
+      - Company
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о компании по указанному ID.
+      parameters:
+      - description: ID компании
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получена компания
+          schema:
+            $ref: '#/definitions/model.Company'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает информацию о компании по ID
+      tags:
+      - Company
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о компании с указанным ID новыми данными.
+      parameters:
+      - description: ID компании
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные компании
+        in: body
+        name: company
+        required: true
+        schema:
+          $ref: '#/definitions/model.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлена компания
+          schema:
+            $ref: '#/definitions/model.Company'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о компании
+      tags:
+      - Company
+swagger: "2.0"

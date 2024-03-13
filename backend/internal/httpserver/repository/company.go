@@ -15,6 +15,8 @@ func NewCompanyRepository(db *sqlx.DB) *CompanyRepository {
 }
 
 func (cr *CompanyRepository) CreateCompany(ctx context.Context, company model.Company) (model.Company, error) {
+	//positionsArray := "{" + strings.Join(company.Positions, ",") + "}"
+
 	query := "INSERT INTO company (name, positions, image, description) VALUES ($1, $2, $3, $4) RETURNING id"
 	row := cr.db.QueryRowContext(ctx, query, company.Name, company.Positions, company.Image, company.Description)
 	var id int
