@@ -1,10 +1,10 @@
-package httpserver
+package http_server
 
 import (
 	"github.com/Max425/manager/internal/config"
-	"github.com/Max425/manager/internal/httpserver/handler"
-	"github.com/Max425/manager/internal/httpserver/repository"
-	"github.com/Max425/manager/internal/httpserver/services"
+	"github.com/Max425/manager/internal/http-server/handler"
+	"github.com/Max425/manager/internal/repository"
+	"github.com/Max425/manager/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
@@ -26,15 +26,13 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 	}
 
 	// create all repositories
-	managerRepo := repository.NewRepository(dbConnect)
+	managerRepo := repository.NewRepository(dbConnect, log)
 
 	// create all services
-	managerService := service.NewService(managerRepo)
+	managerService := service.NewService(managerRepo, log)
 
-	router := gin.New()
+	router := gin.Default()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	router.Use(gin.Logger(), gin.Recovery())
 
 	companyHandler := handler.NewCompanyHandler(log, managerService)
 

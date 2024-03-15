@@ -2,7 +2,11 @@ package handler
 
 import (
 	"context"
-	"github.com/Max425/manager/internal/httpserver/model"
+	"errors"
+	"github.com/Max425/manager/internal/model/common"
+	"github.com/Max425/manager/internal/model/convert"
+	"github.com/Max425/manager/internal/model/core"
+	"github.com/Max425/manager/internal/model/dto"
 	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
@@ -10,9 +14,9 @@ import (
 )
 
 type CompanyService interface {
-	CreateCompany(ctx context.Context, company model.Company) (model.Company, error)
-	GetCompanyByID(ctx context.Context, id int) (model.Company, error)
-	UpdateCompany(ctx context.Context, id int, company model.Company) (model.Company, error)
+	CreateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
+	GetCompanyByID(ctx context.Context, id int) (*core.Company, error)
+	UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error)
 	DeleteCompany(ctx context.Context, id int) error
 }
 
@@ -40,21 +44,26 @@ func NewCompanyHandler(log *slog.Logger, companyService CompanyService) *Company
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies [post]
 func (h *CompanyHandler) CreateCompany(c *gin.Context) {
-	var company model.Company
+	var company dto.Company
 	if err := c.BindJSON(&company); err != nil {
 		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	coreCompany, err := convert.CompanyDtoToCore(&company)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	result, err := h.companyService.CreateCompany(c.Request.Context(), company)
+	result, err := h.companyService.CreateCompany(c.Request.Context(), coreCompany)
 	if err != nil {
 		h.log.Error("Error creating company", slog.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
 		return
 	}
 
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, convert.CompanyCoreToDto(result))
 }
 
 // GetCompany возвращает информацию о компании по ее ID.
@@ -72,18 +81,22 @@ func (h *CompanyHandler) GetCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
 	}
 
 	company, err := h.companyService.GetCompanyByID(c.Request.Context(), id)
 	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
 		h.log.Error("Error getting company", slog.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
 		return
 	}
 
-	c.JSON(http.StatusOK, company)
+	c.JSON(http.StatusOK, convert.CompanyCoreToDto(company))
 }
 
 // UpdateCompany обновляет информацию о компании.
@@ -102,25 +115,35 @@ func (h *CompanyHandler) UpdateCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
 	}
 
-	var company model.Company
+	var company dto.Company
 	if err = c.BindJSON(&company); err != nil {
 		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	coreCompany, err := convert.CompanyDtoToCore(&company)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	result, err := h.companyService.UpdateCompany(c.Request.Context(), id, company)
+	result, err := h.companyService.UpdateCompany(c.Request.Context(), id, coreCompany)
 	if err != nil {
-		h.log.Error("Error updating company", slog.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error update company", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
 		return
 	}
 
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, convert.CompanyCoreToDto(result))
 }
 
 // DeleteCompany удаляет компанию по ее ID.
@@ -138,14 +161,18 @@ func (h *CompanyHandler) DeleteCompany(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
 	}
 
 	err = h.companyService.DeleteCompany(c.Request.Context(), id)
 	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
 		h.log.Error("Error deleting company", slog.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
 		return
 	}
 
