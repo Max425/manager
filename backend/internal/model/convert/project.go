@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func ProjectDtoToCore(dtoProject *dto.Project) *core.Project {
+func ProjectDtoToCore(dtoProject *dto.Project) (*core.Project, error) {
 	return &core.Project{
 		ID:           dtoProject.ID,
 		CompanyID:    dtoProject.CompanyID,
@@ -19,7 +19,7 @@ func ProjectDtoToCore(dtoProject *dto.Project) *core.Project {
 		Deadline:     dtoProject.Deadline,
 		Status:       dtoProject.Status,
 		Complexity:   dtoProject.Complexity,
-	}
+	}, nil
 }
 
 func ProjectCoreToDto(coreProject *core.Project) *dto.Project {

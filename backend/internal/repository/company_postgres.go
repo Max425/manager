@@ -29,7 +29,7 @@ func (cr *CompanyRepository) CreateCompany(ctx context.Context, company *core.Co
 	return company, nil
 }
 
-func (cr *CompanyRepository) FindByID(ctx context.Context, id int) (*core.Company, error) {
+func (cr *CompanyRepository) FindCompanyByID(ctx context.Context, id int) (*core.Company, error) {
 	var company *core.Company
 	err := cr.db.GetContext(ctx, company, "SELECT * FROM company WHERE id=$1", id)
 	if company == nil {
@@ -42,17 +42,17 @@ func (cr *CompanyRepository) FindByID(ctx context.Context, id int) (*core.Compan
 	return company, nil
 }
 
-func (cr *CompanyRepository) Update(ctx context.Context, id int, company *core.Company) (*core.Company, error) {
+func (cr *CompanyRepository) UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error) {
 	_, err := cr.db.ExecContext(ctx, "UPDATE company SET name=$1, positions=$2, image=$3, description=$4 WHERE id=$5",
 		company.Name, company.Positions, company.Image, company.Description, id)
 	if err != nil {
 		cr.log.Error("Error updating company", slog.String("error", err.Error()))
 		return nil, err
 	}
-	return cr.FindByID(ctx, id)
+	return cr.FindCompanyByID(ctx, id)
 }
 
-func (cr *CompanyRepository) Delete(ctx context.Context, id int) error {
+func (cr *CompanyRepository) DeleteCompany(ctx context.Context, id int) error {
 	_, err := cr.db.ExecContext(ctx, "DELETE FROM company WHERE id=$1", id)
 	if err != nil {
 		cr.log.Error("Error delete company", slog.String("error", err.Error()))
