@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/Max425/manager/internal/config"
-	"github.com/Max425/manager/internal/httpserver"
+	"github.com/Max425/manager/internal/http-server"
 	"github.com/Max425/manager/internal/lib/logger/handlers/slogpretty"
 	"log"
 	"log/slog"
@@ -41,7 +41,7 @@ func run() error {
 	logger := setupLogger(cfg.Env)
 
 	// create http server with all handlers & services & repositories
-	srv, err := httpserver.NewHttpServer(logger, cfg.Postgres, cfg.HttpAddr)
+	srv, err := http_server.NewHttpServer(logger, cfg.Postgres, cfg.HttpAddr)
 	if err != nil {
 		logger.Error("create http server", slog.Any("error", err))
 		return err

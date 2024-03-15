@@ -1,4 +1,4 @@
-package model
+package dto
 
 import "time"
 
@@ -13,6 +13,4 @@ type Project struct {
 	Deadline     time.Time `db:"deadline" json:"deadline,omitempty"`
 	Status       int16     `db:"status" json:"status"`
 	Complexity   int16     `db:"complexity" json:"complexity,omitempty"`
-	CreatedAt    time.Time `db:"created_at" json:"-"`
-	UpdatedAt    time.Time `db:"updated_at" json:"-"`
 }
