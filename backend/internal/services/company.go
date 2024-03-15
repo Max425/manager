@@ -8,9 +8,9 @@ import (
 
 type CompanyRepository interface {
 	CreateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
-	FindByID(ctx context.Context, id int) (*core.Company, error)
-	Update(ctx context.Context, id int, company *core.Company) (*core.Company, error)
-	Delete(ctx context.Context, id int) error
+	FindCompanyByID(ctx context.Context, id int) (*core.Company, error)
+	UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error)
+	DeleteCompany(ctx context.Context, id int) error
 }
 
 type CompanyService struct {
@@ -27,23 +27,23 @@ func (s *CompanyService) CreateCompany(ctx context.Context, company *core.Compan
 }
 
 func (s *CompanyService) GetCompanyByID(ctx context.Context, id int) (*core.Company, error) {
-	return s.companyRepo.FindByID(ctx, id)
+	return s.companyRepo.FindCompanyByID(ctx, id)
 }
 
 func (s *CompanyService) UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error) {
-	_, err := s.companyRepo.FindByID(ctx, id)
+	_, err := s.companyRepo.FindCompanyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.companyRepo.Update(ctx, id, company)
+	return s.companyRepo.UpdateCompany(ctx, id, company)
 }
 
 func (s *CompanyService) DeleteCompany(ctx context.Context, id int) error {
-	_, err := s.companyRepo.FindByID(ctx, id)
+	_, err := s.companyRepo.FindCompanyByID(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	return s.companyRepo.Delete(ctx, id)
+	return s.companyRepo.DeleteCompany(ctx, id)
 }

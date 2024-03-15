@@ -35,30 +35,31 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	companyHandler := handler.NewCompanyHandler(log, managerService)
+	employeeHandler := handler.NewEmployeeHandler(log, managerService)
+	projectHandler := handler.NewProjectHandler(log, managerService)
 
 	api := router.Group("/api")
 	{
-		//	lists := api.Group("/lists")
-		//	{
-		//		lists.POST("/", h.createList)
-		//		lists.GET("/", h.getAllLists)
-		//		lists.GET("/:id", h.getListById)
-		//		lists.PUT("/:id", h.updateList)
-		//		lists.DELETE("/:id", h.deleteList)
-		//
-		//		items := lists.Group(":id/items")
-		//		{
-		//			items.POST("/", h.createItem)
-		//			items.GET("/", h.getAllItems)
-		//		}
-		//	}
-		//
 		company := api.Group("/companies")
 		{
 			company.POST("/", companyHandler.CreateCompany)
 			company.GET("/:id", companyHandler.GetCompany)
 			company.PUT("/:id", companyHandler.UpdateCompany)
 			company.DELETE("/:id", companyHandler.DeleteCompany)
+		}
+		employees := api.Group("/employees")
+		{
+			employees.POST("/", employeeHandler.CreateEmployee)
+			employees.GET("/:id", employeeHandler.GetEmployee)
+			employees.PUT("/:id", employeeHandler.UpdateEmployee)
+			employees.DELETE("/:id", employeeHandler.DeleteEmployee)
+		}
+		projects := api.Group("/projects")
+		{
+			projects.POST("/", projectHandler.CreateProject)
+			projects.GET("/:id", projectHandler.GetProject)
+			projects.PUT("/:id", projectHandler.UpdateProject)
+			projects.DELETE("/:id", projectHandler.DeleteProject)
 		}
 	}
 

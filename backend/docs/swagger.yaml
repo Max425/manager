@@ -1,7 +1,9 @@
 basePath: /
 definitions:
-  model.Company:
+  core.Company:
     properties:
+      createdAt:
+        type: string
       description:
         type: string
       id:
@@ -11,9 +13,61 @@ definitions:
       name:
         type: string
       positions:
-        items:
-          type: string
-        type: array
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  core.Employee:
+    properties:
+      companyID:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      mail:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      position:
+        type: string
+      rating:
+        type: number
+      salt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  core.Project:
+    properties:
+      companyID:
+        type: integer
+      complexity:
+        type: integer
+      createdAt:
+        type: string
+      currentStage:
+        type: integer
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      stages:
+        type: string
+      status:
+        type: integer
+      updatedAt:
+        type: string
     type: object
 host: localhost:8000
 info:
@@ -33,14 +87,14 @@ paths:
         name: company
         required: true
         schema:
-          $ref: '#/definitions/model.Company'
+          $ref: '#/definitions/core.Company'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно создана компания
           schema:
-            $ref: '#/definitions/model.Company'
+            $ref: '#/definitions/core.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -97,7 +151,7 @@ paths:
         "200":
           description: Успешно получена компания
           schema:
-            $ref: '#/definitions/model.Company'
+            $ref: '#/definitions/core.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -124,14 +178,14 @@ paths:
         name: company
         required: true
         schema:
-          $ref: '#/definitions/model.Company'
+          $ref: '#/definitions/core.Company'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно обновлена компания
           schema:
-            $ref: '#/definitions/model.Company'
+            $ref: '#/definitions/core.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -143,4 +197,246 @@ paths:
       summary: Обновляет информацию о компании
       tags:
       - Company
+  /api/employees:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового сотрудника с заданными данными.
+      parameters:
+      - description: Данные сотрудника
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/core.Employee'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно создан сотрудник
+          schema:
+            $ref: '#/definitions/core.Employee'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создает нового сотрудника
+      tags:
+      - Employee
+  /api/employees/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет сотрудника с указанным ID.
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление сотрудника
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удаляет сотрудника по ID
+      tags:
+      - Employee
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о сотруднике по указанному ID.
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получен сотрудник
+          schema:
+            $ref: '#/definitions/core.Employee'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает информацию о сотруднике по ID
+      tags:
+      - Employee
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о сотруднике с указанным ID новыми данными.
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные сотрудника
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/core.Employee'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлен сотрудник
+          schema:
+            $ref: '#/definitions/core.Employee'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о сотруднике
+      tags:
+      - Employee
+  /api/projects:
+    post:
+      consumes:
+      - application/json
+      description: Создает новый проект с заданными данными.
+      parameters:
+      - description: Данные проекта
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/core.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно создан проект
+          schema:
+            $ref: '#/definitions/core.Project'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создает новый проект
+      tags:
+      - Project
+  /api/projects/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет проект с указанным ID.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление проекта
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удаляет проект по ID
+      tags:
+      - Project
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о проекте по указанному ID.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получен проект
+          schema:
+            $ref: '#/definitions/core.Project'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает информацию о проекте по ID
+      tags:
+      - Project
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о проекте с указанным ID новыми данными.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные проекта
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/core.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлен проект
+          schema:
+            $ref: '#/definitions/core.Project'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о проекте
+      tags:
+      - Project
 swagger: "2.0"

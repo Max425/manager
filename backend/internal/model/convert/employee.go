@@ -5,7 +5,7 @@ import (
 	"github.com/Max425/manager/internal/model/dto"
 )
 
-func EmployeeDtoToCore(dtoEmployee *dto.Employee) *core.Employee {
+func EmployeeDtoToCore(dtoEmployee *dto.Employee) (*core.Employee, error) {
 	return &core.Employee{
 		ID:        dtoEmployee.ID,
 		CompanyID: dtoEmployee.CompanyID,
@@ -16,7 +16,7 @@ func EmployeeDtoToCore(dtoEmployee *dto.Employee) *core.Employee {
 		Salt:      dtoEmployee.Salt,
 		Image:     dtoEmployee.Image,
 		Rating:    dtoEmployee.Rating,
-	}
+	}, nil
 }
 
 func EmployeeCoreToDto(coreEmployee *core.Employee) *dto.Employee {
