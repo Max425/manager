@@ -38,8 +38,8 @@ func NewEmployeeHandler(log *slog.Logger, employeeService EmployeeService) *Empl
 // @Tags Employee
 // @Accept json
 // @Produce json
-// @Param employee body core.Employee true "Данные сотрудника"
-// @Success 200 {object} core.Employee "Успешно создан сотрудник"
+// @Param employee body dto.Employee true "Данные сотрудника"
+// @Success 200 {object} dto.Employee "Успешно создан сотрудник"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/employees [post]
@@ -73,7 +73,7 @@ func (h *EmployeeHandler) CreateEmployee(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID сотрудника"
-// @Success 200 {object} core.Employee "Успешно получен сотрудник"
+// @Success 200 {object} dto.Employee "Успешно получен сотрудник"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/employees/{id} [get]
@@ -106,8 +106,8 @@ func (h *EmployeeHandler) GetEmployee(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID сотрудника"
-// @Param employee body core.Employee true "Новые данные сотрудника"
-// @Success 200 {object} core.Employee "Успешно обновлен сотрудник"
+// @Param employee body dto.Employee true "Новые данные сотрудника"
+// @Success 200 {object} dto.Employee "Успешно обновлен сотрудник"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/employees/{id} [put]

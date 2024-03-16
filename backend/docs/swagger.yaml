@@ -1,9 +1,7 @@
 basePath: /
 definitions:
-  core.Company:
+  dto.Company:
     properties:
-      createdAt:
-        type: string
       description:
         type: string
       id:
@@ -13,16 +11,16 @@ definitions:
       name:
         type: string
       positions:
-        type: string
-      updatedAt:
-        type: string
+        items:
+          type: string
+        type: array
     type: object
-  core.Employee:
+  dto.Employee:
     properties:
-      companyID:
+      active_projects_count:
         type: integer
-      createdAt:
-        type: string
+      company_id:
+        type: integer
       id:
         type: integer
       image:
@@ -31,26 +29,22 @@ definitions:
         type: string
       name:
         type: string
-      password:
-        type: string
+      overdue_projects_count:
+        type: integer
       position:
         type: string
       rating:
         type: number
-      salt:
-        type: string
-      updatedAt:
-        type: string
+      total_projects_count:
+        type: integer
     type: object
-  core.Project:
+  dto.Project:
     properties:
-      companyID:
+      company_id:
         type: integer
       complexity:
         type: integer
-      createdAt:
-        type: string
-      currentStage:
+      current_stage:
         type: integer
       deadline:
         type: string
@@ -63,11 +57,11 @@ definitions:
       name:
         type: string
       stages:
-        type: string
+        items:
+          type: string
+        type: array
       status:
         type: integer
-      updatedAt:
-        type: string
     type: object
 host: localhost:8000
 info:
@@ -87,14 +81,14 @@ paths:
         name: company
         required: true
         schema:
-          $ref: '#/definitions/core.Company'
+          $ref: '#/definitions/dto.Company'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно создана компания
           schema:
-            $ref: '#/definitions/core.Company'
+            $ref: '#/definitions/dto.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -151,7 +145,7 @@ paths:
         "200":
           description: Успешно получена компания
           schema:
-            $ref: '#/definitions/core.Company'
+            $ref: '#/definitions/dto.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -178,14 +172,14 @@ paths:
         name: company
         required: true
         schema:
-          $ref: '#/definitions/core.Company'
+          $ref: '#/definitions/dto.Company'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно обновлена компания
           schema:
-            $ref: '#/definitions/core.Company'
+            $ref: '#/definitions/dto.Company'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -208,14 +202,14 @@ paths:
         name: employee
         required: true
         schema:
-          $ref: '#/definitions/core.Employee'
+          $ref: '#/definitions/dto.Employee'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно создан сотрудник
           schema:
-            $ref: '#/definitions/core.Employee'
+            $ref: '#/definitions/dto.Employee'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -272,7 +266,7 @@ paths:
         "200":
           description: Успешно получен сотрудник
           schema:
-            $ref: '#/definitions/core.Employee'
+            $ref: '#/definitions/dto.Employee'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -299,14 +293,14 @@ paths:
         name: employee
         required: true
         schema:
-          $ref: '#/definitions/core.Employee'
+          $ref: '#/definitions/dto.Employee'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно обновлен сотрудник
           schema:
-            $ref: '#/definitions/core.Employee'
+            $ref: '#/definitions/dto.Employee'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -329,14 +323,14 @@ paths:
         name: project
         required: true
         schema:
-          $ref: '#/definitions/core.Project'
+          $ref: '#/definitions/dto.Project'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно создан проект
           schema:
-            $ref: '#/definitions/core.Project'
+            $ref: '#/definitions/dto.Project'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -393,7 +387,7 @@ paths:
         "200":
           description: Успешно получен проект
           schema:
-            $ref: '#/definitions/core.Project'
+            $ref: '#/definitions/dto.Project'
         "400":
           description: Ошибка при обработке запроса
           schema:
@@ -420,14 +414,14 @@ paths:
         name: project
         required: true
         schema:
-          $ref: '#/definitions/core.Project'
+          $ref: '#/definitions/dto.Project'
       produces:
       - application/json
       responses:
         "200":
           description: Успешно обновлен проект
           schema:
-            $ref: '#/definitions/core.Project'
+            $ref: '#/definitions/dto.Project'
         "400":
           description: Ошибка при обработке запроса
           schema:

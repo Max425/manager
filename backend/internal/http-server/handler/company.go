@@ -38,8 +38,8 @@ func NewCompanyHandler(log *slog.Logger, companyService CompanyService) *Company
 // @Tags Company
 // @Accept json
 // @Produce json
-// @Param company body core.Company true "Данные компании"
-// @Success 200 {object} core.Company "Успешно создана компания"
+// @Param company body dto.Company true "Данные компании"
+// @Success 200 {object} dto.Company "Успешно создана компания"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies [post]
@@ -73,7 +73,7 @@ func (h *CompanyHandler) CreateCompany(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID компании"
-// @Success 200 {object} core.Company "Успешно получена компания"
+// @Success 200 {object} dto.Company "Успешно получена компания"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies/{id} [get]
@@ -106,8 +106,8 @@ func (h *CompanyHandler) GetCompany(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID компании"
-// @Param company body core.Company true "Новые данные компании"
-// @Success 200 {object} core.Company "Успешно обновлена компания"
+// @Param company body dto.Company true "Новые данные компании"
+// @Success 200 {object} dto.Company "Успешно обновлена компания"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies/{id} [put]

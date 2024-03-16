@@ -38,8 +38,8 @@ func NewProjectHandler(log *slog.Logger, projectService ProjectService) *Project
 // @Tags Project
 // @Accept json
 // @Produce json
-// @Param project body core.Project true "Данные проекта"
-// @Success 200 {object} core.Project "Успешно создан проект"
+// @Param project body dto.Project true "Данные проекта"
+// @Success 200 {object} dto.Project "Успешно создан проект"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/projects [post]
@@ -73,7 +73,7 @@ func (h *ProjectHandler) CreateProject(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID проекта"
-// @Success 200 {object} core.Project "Успешно получен проект"
+// @Success 200 {object} dto.Project "Успешно получен проект"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/projects/{id} [get]
@@ -106,8 +106,8 @@ func (h *ProjectHandler) GetProject(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID проекта"
-// @Param project body core.Project true "Новые данные проекта"
-// @Success 200 {object} core.Project "Успешно обновлен проект"
+// @Param project body dto.Project true "Новые данные проекта"
+// @Success 200 {object} dto.Project "Успешно обновлен проект"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/projects/{id} [put]

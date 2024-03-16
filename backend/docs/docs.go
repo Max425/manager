@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Company"
+                            "$ref": "#/definitions/dto.Company"
                         }
                     }
                 ],
@@ -43,7 +43,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно создана компания",
                         "schema": {
-                            "$ref": "#/definitions/core.Company"
+                            "$ref": "#/definitions/dto.Company"
                         }
                     },
                     "400": {
@@ -87,7 +87,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно получена компания",
                         "schema": {
-                            "$ref": "#/definitions/core.Company"
+                            "$ref": "#/definitions/dto.Company"
                         }
                     },
                     "400": {
@@ -130,7 +130,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Company"
+                            "$ref": "#/definitions/dto.Company"
                         }
                     }
                 ],
@@ -138,7 +138,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно обновлена компания",
                         "schema": {
-                            "$ref": "#/definitions/core.Company"
+                            "$ref": "#/definitions/dto.Company"
                         }
                     },
                     "400": {
@@ -218,7 +218,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Employee"
+                            "$ref": "#/definitions/dto.Employee"
                         }
                     }
                 ],
@@ -226,7 +226,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно создан сотрудник",
                         "schema": {
-                            "$ref": "#/definitions/core.Employee"
+                            "$ref": "#/definitions/dto.Employee"
                         }
                     },
                     "400": {
@@ -270,7 +270,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно получен сотрудник",
                         "schema": {
-                            "$ref": "#/definitions/core.Employee"
+                            "$ref": "#/definitions/dto.Employee"
                         }
                     },
                     "400": {
@@ -313,7 +313,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Employee"
+                            "$ref": "#/definitions/dto.Employee"
                         }
                     }
                 ],
@@ -321,7 +321,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно обновлен сотрудник",
                         "schema": {
-                            "$ref": "#/definitions/core.Employee"
+                            "$ref": "#/definitions/dto.Employee"
                         }
                     },
                     "400": {
@@ -401,7 +401,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Project"
+                            "$ref": "#/definitions/dto.Project"
                         }
                     }
                 ],
@@ -409,7 +409,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно создан проект",
                         "schema": {
-                            "$ref": "#/definitions/core.Project"
+                            "$ref": "#/definitions/dto.Project"
                         }
                     },
                     "400": {
@@ -453,7 +453,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно получен проект",
                         "schema": {
-                            "$ref": "#/definitions/core.Project"
+                            "$ref": "#/definitions/dto.Project"
                         }
                     },
                     "400": {
@@ -496,7 +496,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/core.Project"
+                            "$ref": "#/definitions/dto.Project"
                         }
                     }
                 ],
@@ -504,7 +504,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Успешно обновлен проект",
                         "schema": {
-                            "$ref": "#/definitions/core.Project"
+                            "$ref": "#/definitions/dto.Project"
                         }
                     },
                     "400": {
@@ -566,12 +566,9 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "core.Company": {
+        "dto.Company": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -585,21 +582,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "positions": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
-        "core.Employee": {
+        "dto.Employee": {
             "type": "object",
             "properties": {
-                "companyID": {
+                "active_projects_count": {
                     "type": "integer"
                 },
-                "createdAt": {
-                    "type": "string"
+                "company_id": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -613,8 +610,8 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
+                "overdue_projects_count": {
+                    "type": "integer"
                 },
                 "position": {
                     "type": "string"
@@ -622,27 +619,21 @@ const docTemplate = `{
                 "rating": {
                     "type": "number"
                 },
-                "salt": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                "total_projects_count": {
+                    "type": "integer"
                 }
             }
         },
-        "core.Project": {
+        "dto.Project": {
             "type": "object",
             "properties": {
-                "companyID": {
+                "company_id": {
                     "type": "integer"
                 },
                 "complexity": {
                     "type": "integer"
                 },
-                "createdAt": {
-                    "type": "string"
-                },
-                "currentStage": {
+                "current_stage": {
                     "type": "integer"
                 },
                 "deadline": {
@@ -661,13 +652,13 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "stages": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "status": {
                     "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         }
