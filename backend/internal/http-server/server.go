@@ -1,6 +1,7 @@
 package http_server
 
 import (
+	_ "github.com/Max425/manager/docs"
 	"github.com/Max425/manager/internal/config"
 	"github.com/Max425/manager/internal/http-server/handler"
 	"github.com/Max425/manager/internal/repository"
@@ -10,8 +11,6 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"log/slog"
 	"net/http"
-
-	_ "github.com/Max425/manager/docs"
 )
 
 type Service interface {
