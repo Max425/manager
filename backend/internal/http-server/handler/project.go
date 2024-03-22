@@ -16,7 +16,7 @@ import (
 type ProjectService interface {
 	CreateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	GetProjectByID(ctx context.Context, id int) (*core.Project, error)
-	UpdateProject(ctx context.Context, id int, project *core.Project) (*core.Project, error)
+	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
 }
 
@@ -110,17 +110,10 @@ func (h *ProjectHandler) GetProject(c *gin.Context) {
 // @Success 200 {object} dto.Project "Успешно обновлен проект"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
-// @Router /api/projects/{id} [put]
+// @Router /api/projects [put]
 func (h *ProjectHandler) UpdateProject(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
-		return
-	}
-
 	var project dto.Project
-	if err = c.BindJSON(&project); err != nil {
+	if err := c.BindJSON(&project); err != nil {
 		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
@@ -132,7 +125,7 @@ func (h *ProjectHandler) UpdateProject(c *gin.Context) {
 		return
 	}
 
-	result, err := h.projectService.UpdateProject(c.Request.Context(), id, coreProject)
+	result, err := h.projectService.UpdateProject(c.Request.Context(), coreProject)
 	if err != nil {
 		if errors.Is(err, core.ErrNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})

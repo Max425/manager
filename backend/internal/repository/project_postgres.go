@@ -42,14 +42,14 @@ func (pr *ProjectRepository) FindProjectByID(ctx context.Context, id int) (*core
 	return project, nil
 }
 
-func (pr *ProjectRepository) UpdateProject(ctx context.Context, id int, project *core.Project) (*core.Project, error) {
+func (pr *ProjectRepository) UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error) {
 	_, err := pr.db.ExecContext(ctx, "UPDATE project SET company_id=$1, name=$2, stages=$3, image=$4, description=$5, current_stage=$6, deadline=$7, status=$8, complexity=$9 WHERE id=$10",
-		project.CompanyID, project.Name, project.Stages, project.Image, project.Description, project.CurrentStage, project.Deadline, project.Status, project.Complexity, id)
+		project.CompanyID, project.Name, project.Stages, project.Image, project.Description, project.CurrentStage, project.Deadline, project.Status, project.Complexity, project.ID)
 	if err != nil {
 		pr.log.Error("Error updating project", slog.String("error", err.Error()))
 		return nil, err
 	}
-	return pr.FindProjectByID(ctx, id)
+	return pr.FindProjectByID(ctx, project.ID)
 }
 
 func (pr *ProjectRepository) DeleteProject(ctx context.Context, id int) error {

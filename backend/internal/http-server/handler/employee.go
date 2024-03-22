@@ -16,7 +16,7 @@ import (
 type EmployeeService interface {
 	CreateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	GetEmployeeByID(ctx context.Context, id int) (*core.Employee, error)
-	UpdateEmployee(ctx context.Context, id int, employee *core.Employee) (*core.Employee, error)
+	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
 }
 
@@ -110,17 +110,10 @@ func (h *EmployeeHandler) GetEmployee(c *gin.Context) {
 // @Success 200 {object} dto.Employee "Успешно обновлен сотрудник"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
-// @Router /api/employees/{id} [put]
+// @Router /api/employees [put]
 func (h *EmployeeHandler) UpdateEmployee(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
-		return
-	}
-
 	var employee dto.Employee
-	if err = c.BindJSON(&employee); err != nil {
+	if err := c.BindJSON(&employee); err != nil {
 		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
@@ -132,7 +125,7 @@ func (h *EmployeeHandler) UpdateEmployee(c *gin.Context) {
 		return
 	}
 
-	result, err := h.employeeService.UpdateEmployee(c.Request.Context(), id, coreEmployee)
+	result, err := h.employeeService.UpdateEmployee(c.Request.Context(), coreEmployee)
 	if err != nil {
 		if errors.Is(err, core.ErrNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})

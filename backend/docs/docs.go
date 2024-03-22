@@ -16,6 +16,57 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/companies": {
+            "put": {
+                "description": "Обновляет информацию о компании с указанным ID новыми данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Обновляет информацию о компании",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID компании",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Новые данные компании",
+                        "name": "company",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.Company"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно обновлена компания",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Создает новую компанию с заданными данными.",
                 "consumes": [
@@ -104,57 +155,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Обновляет информацию о компании с указанным ID новыми данными.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Обновляет информацию о компании",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID компании",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Новые данные компании",
-                        "name": "company",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.Company"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешно обновлена компания",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Company"
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Удаляет компанию с указанным ID.",
                 "consumes": [
@@ -199,6 +199,57 @@ const docTemplate = `{
             }
         },
         "/api/employees": {
+            "put": {
+                "description": "Обновляет информацию о сотруднике с указанным ID новыми данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Обновляет информацию о сотруднике",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID сотрудника",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Новые данные сотрудника",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.Employee"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно обновлен сотрудник",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Создает нового сотрудника с заданными данными.",
                 "consumes": [
@@ -287,57 +338,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Обновляет информацию о сотруднике с указанным ID новыми данными.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Employee"
-                ],
-                "summary": "Обновляет информацию о сотруднике",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID сотрудника",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Новые данные сотрудника",
-                        "name": "employee",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.Employee"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешно обновлен сотрудник",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Employee"
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Удаляет сотрудника с указанным ID.",
                 "consumes": [
@@ -382,6 +382,57 @@ const docTemplate = `{
             }
         },
         "/api/projects": {
+            "put": {
+                "description": "Обновляет информацию о проекте с указанным ID новыми данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Обновляет информацию о проекте",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID проекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Новые данные проекта",
+                        "name": "project",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.Project"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно обновлен проект",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Project"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Создает новый проект с заданными данными.",
                 "consumes": [
@@ -452,57 +503,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Успешно получен проект",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Project"
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Обновляет информацию о проекте с указанным ID новыми данными.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Project"
-                ],
-                "summary": "Обновляет информацию о проекте",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID проекта",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Новые данные проекта",
-                        "name": "project",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.Project"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешно обновлен проект",
                         "schema": {
                             "$ref": "#/definitions/dto.Project"
                         }

@@ -42,14 +42,14 @@ func (er *EmployeeRepository) FindEmployeeByID(ctx context.Context, id int) (*co
 	return employee, nil
 }
 
-func (er *EmployeeRepository) UpdateEmployee(ctx context.Context, id int, employee *core.Employee) (*core.Employee, error) {
+func (er *EmployeeRepository) UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error) {
 	_, err := er.db.ExecContext(ctx, "UPDATE employee SET company_id=$1, name=$2, position=$3, mail=$4, password=$5, salt=$6, image=$7, rating=$8 WHERE id=$9",
-		employee.CompanyID, employee.Name, employee.Position, employee.Mail, employee.Password, employee.Salt, employee.Image, employee.Rating, id)
+		employee.CompanyID, employee.Name, employee.Position, employee.Mail, employee.Password, employee.Salt, employee.Image, employee.Rating, employee.ID)
 	if err != nil {
 		er.log.Error("Error updating employee", slog.String("error", err.Error()))
 		return nil, err
 	}
-	return er.FindEmployeeByID(ctx, id)
+	return er.FindEmployeeByID(ctx, employee.ID)
 }
 
 func (er *EmployeeRepository) DeleteEmployee(ctx context.Context, id int) error {

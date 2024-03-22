@@ -9,7 +9,7 @@ import (
 type EmployeeRepository interface {
 	CreateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	FindEmployeeByID(ctx context.Context, id int) (*core.Employee, error)
-	UpdateEmployee(ctx context.Context, id int, employee *core.Employee) (*core.Employee, error)
+	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
 }
 
@@ -30,13 +30,13 @@ func (s *EmployeeService) GetEmployeeByID(ctx context.Context, id int) (*core.Em
 	return s.employeeRepo.FindEmployeeByID(ctx, id)
 }
 
-func (s *EmployeeService) UpdateEmployee(ctx context.Context, id int, employee *core.Employee) (*core.Employee, error) {
-	_, err := s.employeeRepo.FindEmployeeByID(ctx, id)
+func (s *EmployeeService) UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error) {
+	_, err := s.employeeRepo.FindEmployeeByID(ctx, employee.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.employeeRepo.UpdateEmployee(ctx, id, employee)
+	return s.employeeRepo.UpdateEmployee(ctx, employee)
 }
 
 func (s *EmployeeService) DeleteEmployee(ctx context.Context, id int) error {

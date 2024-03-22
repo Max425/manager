@@ -43,21 +43,21 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 		{
 			company.POST("/", companyHandler.CreateCompany)
 			company.GET("/:id", companyHandler.GetCompany)
-			company.PUT("/:id", companyHandler.UpdateCompany)
+			company.PUT("/", companyHandler.UpdateCompany)
 			company.DELETE("/:id", companyHandler.DeleteCompany)
 		}
 		employees := api.Group("/employees")
 		{
 			employees.POST("/", employeeHandler.CreateEmployee)
 			employees.GET("/:id", employeeHandler.GetEmployee)
-			employees.PUT("/:id", employeeHandler.UpdateEmployee)
+			employees.PUT("/", employeeHandler.UpdateEmployee)
 			employees.DELETE("/:id", employeeHandler.DeleteEmployee)
 		}
 		projects := api.Group("/projects")
 		{
 			projects.POST("/", projectHandler.CreateProject)
 			projects.GET("/:id", projectHandler.GetProject)
-			projects.PUT("/:id", projectHandler.UpdateProject)
+			projects.PUT("/", projectHandler.UpdateProject)
 			projects.DELETE("/:id", projectHandler.DeleteProject)
 		}
 	}

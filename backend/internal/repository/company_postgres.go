@@ -42,14 +42,14 @@ func (cr *CompanyRepository) FindCompanyByID(ctx context.Context, id int) (*core
 	return company, nil
 }
 
-func (cr *CompanyRepository) UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error) {
+func (cr *CompanyRepository) UpdateCompany(ctx context.Context, company *core.Company) (*core.Company, error) {
 	_, err := cr.db.ExecContext(ctx, "UPDATE company SET name=$1, positions=$2, image=$3, description=$4 WHERE id=$5",
-		company.Name, company.Positions, company.Image, company.Description, id)
+		company.Name, company.Positions, company.Image, company.Description, company.ID)
 	if err != nil {
 		cr.log.Error("Error updating company", slog.String("error", err.Error()))
 		return nil, err
 	}
-	return cr.FindCompanyByID(ctx, id)
+	return cr.FindCompanyByID(ctx, company.ID)
 }
 
 func (cr *CompanyRepository) DeleteCompany(ctx context.Context, id int) error {

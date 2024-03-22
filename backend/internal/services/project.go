@@ -9,7 +9,7 @@ import (
 type ProjectRepository interface {
 	CreateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	FindProjectByID(ctx context.Context, id int) (*core.Project, error)
-	UpdateProject(ctx context.Context, id int, project *core.Project) (*core.Project, error)
+	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
 }
 
@@ -30,13 +30,13 @@ func (s *ProjectService) GetProjectByID(ctx context.Context, id int) (*core.Proj
 	return s.projectRepo.FindProjectByID(ctx, id)
 }
 
-func (s *ProjectService) UpdateProject(ctx context.Context, id int, project *core.Project) (*core.Project, error) {
-	_, err := s.projectRepo.FindProjectByID(ctx, id)
+func (s *ProjectService) UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error) {
+	_, err := s.projectRepo.FindProjectByID(ctx, project.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.projectRepo.UpdateProject(ctx, id, project)
+	return s.projectRepo.UpdateProject(ctx, project)
 }
 
 func (s *ProjectService) DeleteProject(ctx context.Context, id int) error {

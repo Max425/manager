@@ -16,7 +16,7 @@ import (
 type CompanyService interface {
 	CreateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
 	GetCompanyByID(ctx context.Context, id int) (*core.Company, error)
-	UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error)
+	UpdateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
 	DeleteCompany(ctx context.Context, id int) error
 }
 
@@ -110,17 +110,10 @@ func (h *CompanyHandler) GetCompany(c *gin.Context) {
 // @Success 200 {object} dto.Company "Успешно обновлена компания"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
-// @Router /api/companies/{id} [put]
+// @Router /api/companies [put]
 func (h *CompanyHandler) UpdateCompany(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
-		return
-	}
-
 	var company dto.Company
-	if err = c.BindJSON(&company); err != nil {
+	if err := c.BindJSON(&company); err != nil {
 		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
 		return
@@ -132,7 +125,7 @@ func (h *CompanyHandler) UpdateCompany(c *gin.Context) {
 		return
 	}
 
-	result, err := h.companyService.UpdateCompany(c.Request.Context(), id, coreCompany)
+	result, err := h.companyService.UpdateCompany(c.Request.Context(), coreCompany)
 	if err != nil {
 		if errors.Is(err, core.ErrNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})

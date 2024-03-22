@@ -100,6 +100,40 @@ paths:
       summary: Создает новую компанию
       tags:
       - Company
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о компании с указанным ID новыми данными.
+      parameters:
+      - description: ID компании
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные компании
+        in: body
+        name: company
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлена компания
+          schema:
+            $ref: '#/definitions/dto.Company'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о компании
+      tags:
+      - Company
   /api/companies/{id}:
     delete:
       consumes:
@@ -157,40 +191,6 @@ paths:
       summary: Возвращает информацию о компании по ID
       tags:
       - Company
-    put:
-      consumes:
-      - application/json
-      description: Обновляет информацию о компании с указанным ID новыми данными.
-      parameters:
-      - description: ID компании
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Новые данные компании
-        in: body
-        name: company
-        required: true
-        schema:
-          $ref: '#/definitions/dto.Company'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешно обновлена компания
-          schema:
-            $ref: '#/definitions/dto.Company'
-        "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            type: string
-      summary: Обновляет информацию о компании
-      tags:
-      - Company
   /api/employees:
     post:
       consumes:
@@ -219,6 +219,40 @@ paths:
           schema:
             type: string
       summary: Создает нового сотрудника
+      tags:
+      - Employee
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о сотруднике с указанным ID новыми данными.
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные сотрудника
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Employee'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлен сотрудник
+          schema:
+            $ref: '#/definitions/dto.Employee'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о сотруднике
       tags:
       - Employee
   /api/employees/{id}:
@@ -278,40 +312,6 @@ paths:
       summary: Возвращает информацию о сотруднике по ID
       tags:
       - Employee
-    put:
-      consumes:
-      - application/json
-      description: Обновляет информацию о сотруднике с указанным ID новыми данными.
-      parameters:
-      - description: ID сотрудника
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Новые данные сотрудника
-        in: body
-        name: employee
-        required: true
-        schema:
-          $ref: '#/definitions/dto.Employee'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешно обновлен сотрудник
-          schema:
-            $ref: '#/definitions/dto.Employee'
-        "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            type: string
-      summary: Обновляет информацию о сотруднике
-      tags:
-      - Employee
   /api/projects:
     post:
       consumes:
@@ -340,6 +340,40 @@ paths:
           schema:
             type: string
       summary: Создает новый проект
+      tags:
+      - Project
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о проекте с указанным ID новыми данными.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные проекта
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно обновлен проект
+          schema:
+            $ref: '#/definitions/dto.Project'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновляет информацию о проекте
       tags:
       - Project
   /api/projects/{id}:
@@ -397,40 +431,6 @@ paths:
           schema:
             type: string
       summary: Возвращает информацию о проекте по ID
-      tags:
-      - Project
-    put:
-      consumes:
-      - application/json
-      description: Обновляет информацию о проекте с указанным ID новыми данными.
-      parameters:
-      - description: ID проекта
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Новые данные проекта
-        in: body
-        name: project
-        required: true
-        schema:
-          $ref: '#/definitions/dto.Project'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешно обновлен проект
-          schema:
-            $ref: '#/definitions/dto.Project'
-        "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            type: string
-      summary: Обновляет информацию о проекте
       tags:
       - Project
 swagger: "2.0"

@@ -9,7 +9,7 @@ import (
 type CompanyRepository interface {
 	CreateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
 	FindCompanyByID(ctx context.Context, id int) (*core.Company, error)
-	UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error)
+	UpdateCompany(ctx context.Context, company *core.Company) (*core.Company, error)
 	DeleteCompany(ctx context.Context, id int) error
 }
 
@@ -30,13 +30,13 @@ func (s *CompanyService) GetCompanyByID(ctx context.Context, id int) (*core.Comp
 	return s.companyRepo.FindCompanyByID(ctx, id)
 }
 
-func (s *CompanyService) UpdateCompany(ctx context.Context, id int, company *core.Company) (*core.Company, error) {
-	_, err := s.companyRepo.FindCompanyByID(ctx, id)
+func (s *CompanyService) UpdateCompany(ctx context.Context, company *core.Company) (*core.Company, error) {
+	_, err := s.companyRepo.FindCompanyByID(ctx, company.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.companyRepo.UpdateCompany(ctx, id, company)
+	return s.companyRepo.UpdateCompany(ctx, company)
 }
 
 func (s *CompanyService) DeleteCompany(ctx context.Context, id int) error {
