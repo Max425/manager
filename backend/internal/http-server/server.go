@@ -43,6 +43,8 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 		{
 			company.POST("/", companyHandler.CreateCompany)
 			company.GET("/:id", companyHandler.GetCompany)
+			company.GET("/employees", employeeHandler.GetEmployeesByCompanyID)
+			company.GET("/projects", projectHandler.GetProjectsByCompanyID)
 			company.PUT("/", companyHandler.UpdateCompany)
 			company.DELETE("/:id", companyHandler.DeleteCompany)
 		}

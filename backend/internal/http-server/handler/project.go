@@ -16,6 +16,7 @@ import (
 type ProjectService interface {
 	CreateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	GetProjectByID(ctx context.Context, id int) (*core.Project, error)
+	GetProjectsByCompanyID(ctx context.Context, companyID int) ([]*core.Project, error)
 	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
 }
@@ -97,6 +98,38 @@ func (h *ProjectHandler) GetProject(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, convert.ProjectCoreToDto(project))
+}
+
+// GetProjectsByCompanyID возвращает все проекты компании по ее ID из контекста.
+// @Summary Возвращает все проекты компании по ID компании из контекста
+// @Description Возвращает все проекты компании по ID компании из контекста.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Success 200 {array} dto.Project "Успешно получены проекты компании"
+// @Failure 404 {object} string "Компания не найдена"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies/projects [get]
+func (h *ProjectHandler) GetProjectsByCompanyID(c *gin.Context) {
+	companyID := 1 //c.Value("company_id").(int)
+
+	projects, err := h.projectService.GetProjectsByCompanyID(c.Request.Context(), companyID)
+	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error getting projects by company ID", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+
+	var dtoProjects []*dto.Project
+	for _, project := range projects {
+		dtoProjects = append(dtoProjects, convert.ProjectCoreToDto(project))
+	}
+
+	c.JSON(http.StatusOK, dtoProjects)
 }
 
 // UpdateProject обновляет информацию о проекте.

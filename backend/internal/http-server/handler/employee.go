@@ -16,6 +16,7 @@ import (
 type EmployeeService interface {
 	CreateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	GetEmployeeByID(ctx context.Context, id int) (*core.Employee, error)
+	GetEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error)
 	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
 }
@@ -97,6 +98,38 @@ func (h *EmployeeHandler) GetEmployee(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, convert.EmployeeCoreToDto(employee))
+}
+
+// GetEmployeesByCompanyID возвращает всех сотрудников компании по ее ID из контекста.
+// @Summary Возвращает всех сотрудников компании по ID компании из контекста
+// @Description Возвращает всех сотрудников компании по ID компании из контекста.
+// @Tags Company
+// @Accept json
+// @Produce json
+// @Success 200 {array} dto.Employee "Успешно получены сотрудники компании"
+// @Failure 404 {object} string "Компания не найдена"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/companies/employees [get]
+func (h *EmployeeHandler) GetEmployeesByCompanyID(c *gin.Context) {
+	companyID := 1 //c.Value("company_id").(int)
+
+	employees, err := h.employeeService.GetEmployeesByCompanyID(c.Request.Context(), companyID)
+	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error getting employees by company ID", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+
+	var dtoEmployees []*dto.Employee
+	for _, employee := range employees {
+		dtoEmployees = append(dtoEmployees, convert.EmployeeCoreToDto(employee))
+	}
+
+	c.JSON(http.StatusOK, dtoEmployees)
 }
 
 // UpdateEmployee обновляет информацию о сотруднике.

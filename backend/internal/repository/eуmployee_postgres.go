@@ -42,6 +42,19 @@ func (er *EmployeeRepository) FindEmployeeByID(ctx context.Context, id int) (*co
 	return employee, nil
 }
 
+func (er *EmployeeRepository) FindEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error) {
+	var employees []*core.Employee
+	err := er.db.SelectContext(ctx, &employees, "SELECT * FROM employee WHERE company_id=$1", companyID)
+	if err != nil {
+		er.log.Error("Error finding employees by company ID", slog.String("error", err.Error()))
+		return nil, core.ErrInternal
+	}
+	if len(employees) == 0 {
+		return nil, core.ErrNotFound
+	}
+	return employees, nil
+}
+
 func (er *EmployeeRepository) UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error) {
 	_, err := er.db.ExecContext(ctx, "UPDATE employee SET company_id=$1, name=$2, position=$3, mail=$4, password=$5, salt=$6, image=$7, rating=$8 WHERE id=$9",
 		employee.CompanyID, employee.Name, employee.Position, employee.Mail, employee.Password, employee.Salt, employee.Image, employee.Rating, employee.ID)

@@ -9,6 +9,7 @@ type Repository struct {
 	CompanyRepository
 	ProjectRepository
 	EmployeeRepository
+	SessionRepository
 }
 
 func NewRepository(db *sqlx.DB, log *slog.Logger) *Repository {
@@ -16,5 +17,6 @@ func NewRepository(db *sqlx.DB, log *slog.Logger) *Repository {
 		*NewCompanyRepository(db, log),
 		*NewProjectRepository(db, log),
 		*NewEmployeeRepository(db, log),
+		*NewSessionRepository(db, log),
 	}
 }

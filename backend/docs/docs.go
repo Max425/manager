@@ -112,6 +112,82 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/companies/employees": {
+            "get": {
+                "description": "Возвращает всех сотрудников компании по ID компании из контекста.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Возвращает всех сотрудников компании по ID компании из контекста",
+                "responses": {
+                    "200": {
+                        "description": "Успешно получены сотрудники компании",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.Employee"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Компания не найдена",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/companies/projects": {
+            "get": {
+                "description": "Возвращает все проекты компании по ID компании из контекста.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Возвращает все проекты компании по ID компании из контекста",
+                "responses": {
+                    "200": {
+                        "description": "Успешно получены проекты компании",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.Project"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Компания не найдена",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/companies/{id}": {
             "get": {
                 "description": "Возвращает информацию о компании по указанному ID.",

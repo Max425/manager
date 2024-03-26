@@ -191,6 +191,56 @@ paths:
       summary: Возвращает информацию о компании по ID
       tags:
       - Company
+  /api/companies/employees:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает всех сотрудников компании по ID компании из контекста.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получены сотрудники компании
+          schema:
+            items:
+              $ref: '#/definitions/dto.Employee'
+            type: array
+        "404":
+          description: Компания не найдена
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает всех сотрудников компании по ID компании из контекста
+      tags:
+      - Company
+  /api/companies/projects:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все проекты компании по ID компании из контекста.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получены проекты компании
+          schema:
+            items:
+              $ref: '#/definitions/dto.Project'
+            type: array
+        "404":
+          description: Компания не найдена
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает все проекты компании по ID компании из контекста
+      tags:
+      - Company
   /api/employees:
     post:
       consumes:

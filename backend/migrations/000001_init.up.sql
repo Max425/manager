@@ -1,3 +1,11 @@
+create table sessions
+(
+    sid        text primary key,
+    role       int         not null,
+    company_id int         not null,
+    expiration timestamptz not null
+);
+
 create table company
 (
     id          serial primary key,
@@ -12,19 +20,20 @@ create table company
 create table employee
 (
     id                     serial primary key,
-    company_id             int  not null references "company" on delete cascade,
-    name                   text not null,
+    company_id             int      not null references "company" on delete cascade,
+    name                   text     not null,
     position               text,
     mail                   text unique,
-    password               text not null,
-    salt                   text not null,
+    password               text     not null,
+    salt                   text     not null,
     image                  text,
     rating                 decimal,
-    active_projects_count  int         default 0,
-    overdue_projects_count int         default 0,
-    total_projects_count   int         default 0,
-    created_at             timestamptz default timezone('Europe/Moscow'::text, now()),
-    updated_at             timestamptz default timezone('Europe/Moscow'::text, now())
+    active_projects_count  int               default 0,
+    overdue_projects_count int               default 0,
+    total_projects_count   int               default 0,
+    role                   smallint not null default 0 check (role between 0 and 1 ),
+    created_at             timestamptz       default timezone('Europe/Moscow'::text, now()),
+    updated_at             timestamptz       default timezone('Europe/Moscow'::text, now())
 );
 
 create index on employee (company_id, position);
