@@ -30,16 +30,17 @@ func (pr *ProjectRepository) CreateProject(ctx context.Context, project *core.Pr
 }
 
 func (pr *ProjectRepository) FindProjectByID(ctx context.Context, id int) (*core.Project, error) {
-	var project *core.Project
-	err := pr.db.GetContext(ctx, project, "SELECT * FROM project WHERE id=$1", id)
-	if project == nil {
-		return nil, core.ErrNotFound
-	}
+	var project core.Project
+	err := pr.db.GetContext(ctx, &project, "SELECT * FROM project WHERE id=$1", id)
 	if err != nil {
 		pr.log.Error("Error finding project", slog.String("error", err.Error()))
 		return nil, core.ErrInternal
 	}
-	return project, nil
+	if project.ID == 0 {
+		return nil, core.ErrNotFound
+	}
+
+	return &project, nil
 }
 
 func (pr *ProjectRepository) FindProjectsByCompanyID(ctx context.Context, companyID int) ([]*core.Project, error) {

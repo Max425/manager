@@ -30,16 +30,17 @@ func (cr *CompanyRepository) CreateCompany(ctx context.Context, company *core.Co
 }
 
 func (cr *CompanyRepository) FindCompanyByID(ctx context.Context, id int) (*core.Company, error) {
-	var company *core.Company
-	err := cr.db.GetContext(ctx, company, "SELECT * FROM company WHERE id=$1", id)
-	if company == nil {
-		return nil, core.ErrNotFound
-	}
+	var company core.Company
+	err := cr.db.GetContext(ctx, &company, "SELECT * FROM company WHERE id=$1", id)
 	if err != nil {
 		cr.log.Error("Error find company", slog.String("error", err.Error()))
 		return nil, core.ErrInternal
 	}
-	return company, nil
+	if company.ID == 0 {
+		return nil, core.ErrNotFound
+	}
+
+	return &company, nil
 }
 
 func (cr *CompanyRepository) UpdateCompany(ctx context.Context, company *core.Company) (*core.Company, error) {

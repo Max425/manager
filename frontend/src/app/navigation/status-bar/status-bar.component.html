@@ -1,0 +1,15 @@
+<div class="user-main">
+  <nav *ngIf="(auth.sessionStarted | async)!.user as user">
+    <div [matMenuTriggerFor]="menu" class="user-data">
+      <div class="user">
+        <img class="avatar" src="./assets/profile-circle.svg" alt="avatar">
+        <span>{{ user.userName }}</span>
+      </div>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="auth.logout()">
+        <mat-icon>logout</mat-icon> Выйти из аккаунта
+      </button>
+    </mat-menu>
+  </nav>
+</div>

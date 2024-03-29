@@ -1,0 +1,11 @@
+:host {
+  button {
+    background: var(--grey-color);
+    border: 1px solid var(--black-color);
+    border-radius: 10px;
+    height: 32px;
+    margin-right: 5px;
+    padding: 0 15px;
+    cursor: pointer;
+  }
+}

@@ -31,6 +31,8 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 	managerService := service.NewService(managerRepo, log)
 
 	router := gin.Default()
+	router.Use(CorsMiddleware())
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	companyHandler := handler.NewCompanyHandler(log, managerService)
@@ -41,25 +43,25 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 	{
 		company := api.Group("/companies")
 		{
-			company.POST("/", companyHandler.CreateCompany)
+			company.POST("", companyHandler.CreateCompany)
 			company.GET("/:id", companyHandler.GetCompany)
 			company.GET("/employees", employeeHandler.GetEmployeesByCompanyID)
 			company.GET("/projects", projectHandler.GetProjectsByCompanyID)
-			company.PUT("/", companyHandler.UpdateCompany)
+			company.PUT("", companyHandler.UpdateCompany)
 			company.DELETE("/:id", companyHandler.DeleteCompany)
 		}
 		employees := api.Group("/employees")
 		{
-			employees.POST("/", employeeHandler.CreateEmployee)
+			employees.POST("", employeeHandler.CreateEmployee)
 			employees.GET("/:id", employeeHandler.GetEmployee)
-			employees.PUT("/", employeeHandler.UpdateEmployee)
+			employees.PUT("", employeeHandler.UpdateEmployee)
 			employees.DELETE("/:id", employeeHandler.DeleteEmployee)
 		}
 		projects := api.Group("/projects")
 		{
-			projects.POST("/", projectHandler.CreateProject)
+			projects.POST("", projectHandler.CreateProject)
 			projects.GET("/:id", projectHandler.GetProject)
-			projects.PUT("/", projectHandler.UpdateProject)
+			projects.PUT("", projectHandler.UpdateProject)
 			projects.DELETE("/:id", projectHandler.DeleteProject)
 		}
 	}

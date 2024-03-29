@@ -1,0 +1,30 @@
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .filter {
+    display: flex;
+    gap: 10px;
+
+    mat-form-field {
+      ::ng-deep.mdc-text-field--filled {
+        background: var(--grey-color);
+      }
+    }
+
+  }
+
+  .grafana-main {
+    width: 100%;
+    height: 100%;
+
+    .grafana {
+      border: 0;
+      width: 100%;
+      height: 99%;
+      scroll-behavior: unset;
+    }
+  }
+}

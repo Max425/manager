@@ -1,0 +1,114 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  user-select: none;
+  width: 300px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  height: 100%;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+
+  .tree-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-chat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    mat-icon {
+      margin-right: -10%;
+      z-index: 10;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      border: 1px solid;
+      border-radius: 10px;
+      padding-left: 30px;
+    }
+  }
+
+  .tree-chat-main {
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    width: 300px;
+
+    .tree-chat {
+      margin-bottom: 10px;
+    }
+
+    .tree-node-user {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+
+      .tree-node-info-user {
+        display: flex;
+        align-items: center;
+      }
+
+      span {
+        font-weight: bold;
+        font-family: "Roboto Mono";
+        font-size: 16px;
+      }
+
+      .countQuestion {
+        margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--blue-color);
+        border-radius: 50px;
+        width: 20px;
+        height: 20px;
+
+        p {
+          color: white;
+          font-family: "Roboto Mono";
+          font-size: 14px;
+        }
+      }
+    }
+
+    .tree-list {
+      margin-top: 5px;
+      margin-left: 20px;
+
+      .tree-node {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        .tree-node-question {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 70%;
+          font-family: "Roboto Mono";
+          font-size: 14px;
+        }
+
+        .tree-node-date {
+          font-family: "Roboto Mono";
+          font-size: 14px;
+          margin-right: 10px;
+        }
+      }
+    }
+
+  }
+}

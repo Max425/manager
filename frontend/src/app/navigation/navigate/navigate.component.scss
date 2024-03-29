@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  background-color: var(--grey-color);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+
+  .logo img {
+    margin-left: 10px;
+    width: 64px;
+  }
+
+  .navigation{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+}
+

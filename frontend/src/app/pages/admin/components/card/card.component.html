@@ -1,0 +1,11 @@
+<div class="card" [routerLink]="['/employee', employee.id]">
+  <img [src]="employee.image" alt="{{employee.name}}" class="card-image">
+  <div class="card-content">
+    <h4>{{employee.name}}</h4>
+    <p>{{employee.position}}</p>
+    <p>Email: {{employee.mail}}</p>
+    <p>Active Projects: {{employee.active_projects_count}}</p>
+    <p>Total Projects: {{employee.total_projects_count}}</p>
+    <!-- Add more fields as needed -->
+  </div>
+</div>

@@ -1,0 +1,132 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  .chat-main{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .view-chat {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+
+    .chat {
+      display: flex;
+      flex-direction: column-reverse;
+      width: 80%;
+      height: 100%;
+      margin-left: 10%;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      .chat-info-admin {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-content: flex-end;
+        align-items: flex-end;
+
+        .chat-admin {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+          font-family: "Roboto Mono";
+
+          p {
+            font-weight: bold;
+            font-size: 14px;
+          }
+
+          span {
+            font-size: 12px;
+          }
+        }
+
+        .chat-message {
+          margin-top: 10px;
+          background: var(--blue-color);
+          padding: 10px;
+          border-radius: 20px 20px 0 20px;
+        }
+      }
+
+      .chat-info-user {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+
+        .chat-user {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+          font-family: "Roboto Mono";
+
+          p {
+            font-weight: bold;
+            font-size: 14px;
+          }
+          span {
+            font-size: 12px;
+          }
+        }
+
+        .chat-message {
+          margin-top: 10px;
+          background: var(--blue-color);
+          padding: 10px;
+          border-radius: 20px 20px 20px 0;
+        }
+      }
+    }
+
+    .chat-input-message {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+
+      .chat-submit {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+
+      }
+
+      textarea {
+        background: var(--grey-color);
+        border: 1px solid  var(--black-color);
+        border-radius: 15px;
+        max-height: 58px;
+        min-height: 30px;
+        width: 400px;
+        white-space: normal;
+        text-align: center;
+        padding-top: 10px;
+      }
+
+      button {
+        background: var(--grey-color);
+        border: 1px solid  var(--black-color);
+        border-radius: 10px;
+        height: 32px;
+      }
+    }
+  }
+}

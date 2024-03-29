@@ -1,0 +1,32 @@
+:host {
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  nav ul {
+    list-style: none;
+    display: flex;
+  }
+
+  nav li {
+    margin-right: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--black-color);
+    font-size: 24px;
+    font-weight: 700;
+
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .active {
+    text-decoration: underline
+  }
+}
+

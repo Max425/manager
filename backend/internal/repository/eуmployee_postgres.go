@@ -30,16 +30,16 @@ func (er *EmployeeRepository) CreateEmployee(ctx context.Context, employee *core
 }
 
 func (er *EmployeeRepository) FindEmployeeByID(ctx context.Context, id int) (*core.Employee, error) {
-	var employee *core.Employee
-	err := er.db.GetContext(ctx, employee, "SELECT * FROM employee WHERE id=$1", id)
-	if employee == nil {
-		return nil, core.ErrNotFound
-	}
+	var employee core.Employee
+	err := er.db.GetContext(ctx, &employee, "SELECT * FROM employee WHERE id=$1", id)
 	if err != nil {
 		er.log.Error("Error finding employee", slog.String("error", err.Error()))
 		return nil, core.ErrInternal
 	}
-	return employee, nil
+	if employee.ID == 0 {
+		return nil, core.ErrNotFound
+	}
+	return &employee, nil
 }
 
 func (er *EmployeeRepository) FindEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error) {

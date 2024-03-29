@@ -1,0 +1,37 @@
+<div class="tree-main">
+  <div class="filter-chat" [formGroup]="treeSearch">
+    <mat-icon aria-hidden="false">search</mat-icon>
+    <input placeholder="Поиск" formControlName="search">
+  </div>
+  <div class="tree-chat-main">
+    <div class="tree-chat" *ngFor="let chat of (filterData$ | async) || [] | paginate: {
+              itemsPerPage: pageSize,
+              currentPage: page,
+              totalItems: count
+            }">
+      <div class="tree-node-user" (click)="updateView(chat)">
+        <div class="tree-node-info-user">
+          <mat-icon aria-hidden="false">{{chat.isHidden ? "arrow_drop_down" : "arrow_right"}}</mat-icon>
+          <span>{{chat.userId}} {{chat.userName}} </span>
+        </div>
+        <div class="countQuestion">
+          <p>{{chat.countQuestion}}</p>
+        </div>
+      </div>
+      <div *ngIf="chat.isHidden" class="tree-list">
+        <div *ngFor="let question of chat.questions" class="tree-node" (click)="selectEmitter.emit(convertMessage(chat, question))">
+          <div class="tree-node-question">{{question.text}}</div>
+          <div class="tree-node-date">
+            <span>{{question.requestTime | date: "dd MMMM yyyy HH:mm"}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<pagination-controls previousLabel="Назад"
+                     nextLabel="Следующий"
+                     [responsive]="true"
+                     (pageChange)="handlePageChange($event)"
+></pagination-controls>

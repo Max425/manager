@@ -1,0 +1,47 @@
+<div class="filter">
+    <mat-form-field>
+    <mat-label>Введите диапозон дат</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate placeholder="Начало" #dateRangeStart>
+      <input matEndDate placeholder="Конец" #dateRangeEnd (dateChange)="click(dateRangeStart, dateRangeEnd)">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <div class="wrapper">
+    <div class="inner-wrap">
+      <mat-form-field>
+        <mat-select
+          [formControl]="userIdCtrl"
+          placeholder="Пользователи"
+          [multiple]="true"
+          #singleSelect
+        >
+          <mat-option>
+            <ngx-mat-select-search
+              [formControl]="userIdFilterCtrl"
+              placeholderLabel="Поиск по id"
+              noEntriesFoundLabel="Не найдено"
+              [showToggleAllCheckbox]="true"
+              toggleAllCheckboxTooltipMessage="Выбрать / Отменить все"
+              [toggleAllCheckboxIndeterminate]="isIndeterminate"
+              [toggleAllCheckboxChecked]="isChecked"
+              (toggleAll)="toggleSelectAll($event)"
+            >
+              <mat-icon ngxMatSelectSearchClear>delete</mat-icon>
+            </ngx-mat-select-search>
+          </mat-option>
+
+          <mat-option *ngFor="let userId of filteredUserIds | async" [value]="userId">
+            {{ userId }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<div class="grafana-main">
+  <iframe class="grafana" [src]="getDashboard()" allowfullscreen> </iframe>
+</div>
