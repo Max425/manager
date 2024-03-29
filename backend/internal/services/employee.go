@@ -12,6 +12,7 @@ type EmployeeRepository interface {
 	FindEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error)
 	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
+	GetEmployerProjects(ctx context.Context, id int) ([]*core.Project, error)
 }
 
 type EmployeeService struct {
@@ -29,6 +30,10 @@ func (s *EmployeeService) CreateEmployee(ctx context.Context, employee *core.Emp
 
 func (s *EmployeeService) GetEmployeeByID(ctx context.Context, id int) (*core.Employee, error) {
 	return s.employeeRepo.FindEmployeeByID(ctx, id)
+}
+
+func (s *EmployeeService) GetEmployerProjects(ctx context.Context, id int) ([]*core.Project, error) {
+	return s.employeeRepo.GetEmployerProjects(ctx, id)
 }
 
 func (s *EmployeeService) GetEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error) {

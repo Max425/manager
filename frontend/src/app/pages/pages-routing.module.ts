@@ -1,46 +1,36 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
-import {ChatsComponent} from "./chats/chats.component";
-import {AuthGuard} from "../auth/guards/auth.guard";
-import {LoggingComponent} from "./logging/logging.component";
-import {StatisticsComponent} from "./statistics/statistics.component";
 import {HomeComponent} from "./home/home.component";
-import {AdminComponent} from "./admin/admin.component";
+import {EmployeesComponent} from "./employees/employees.component";
 import {EmployeeComponent} from "./employee/employee.component";
+import {ProjectsComponent} from "./projects/projects.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-    children: [
-      {
-        path: 'chats',
-        component: ChatsComponent,
-      },
-      {
-        path: 'employees',
-        component: AdminComponent,
-      },
-      {
-        path: 'employee/:id',
-        component: EmployeeComponent,
-      },
-      {
-        path: 'logging',
-        component: LoggingComponent,
-      },
-      {
-        path: 'statistics',
-        component: StatisticsComponent,
-      }
-    ]
-  }
+    {
+        path: '',
+        component: HomeComponent,
+        children: [
+            {
+                path: 'employees',
+                component: EmployeesComponent,
+            },
+            {
+                path: 'employee/:id',
+                component: EmployeeComponent,
+            },
+            {
+                path: 'projects',
+                component: ProjectsComponent,
+            },
+        ]
+    }
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 
-export class PageRoutingModule {}
+export class PageRoutingModule {
+}

@@ -11,7 +11,6 @@ import {RouterModule} from "@angular/router";
 import {AuthModule} from "../auth/auth.module";
 import {CommonModule} from "@angular/common";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MaterialProxyModule} from "../material-proxy/material-proxy.module";
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import {MaterialProxyModule} from "../material-proxy/material-proxy.module";
     CommonModule,
     CoreModule,
     AppRoutingModule,
-    MaterialProxyModule,
     PagesModule,
     HttpClientModule,
     BrowserAnimationsModule,

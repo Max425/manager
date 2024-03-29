@@ -1,7 +1,8 @@
 <aside>
     <nav>
-      <ul>
-        <li *ngFor="let link of this.links"><a [class]="setActive(link)" routerLink="{{link.link}}" (click)="onSelect(link)">{{link.name}}</a></li>
-      </ul>
+        <ul>
+            <li *ngFor="let link of this.links"><a [class]="setActive(link)" routerLink="{{link.link}}"
+                                                   (click)="onSelect(link)">{{link.name}}</a></li>
+        </ul>
     </nav>
 </aside>

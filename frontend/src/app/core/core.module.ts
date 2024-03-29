@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {InputComponent} from "./components/input/input.component";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
-import {MaterialProxyModule} from "../material-proxy/material-proxy.module";
+import {ProjectCardComponent} from "./components/project-card/project-card.component";
+import {EmployeeCardComponent} from "./components/employee-card/employee-card.component";
+import {ManagerButtonComponent} from "./components/manager-button/manager-button.component";
 
 
 @NgModule({
   declarations: [
-    InputComponent
+    ProjectCardComponent,
+    EmployeeCardComponent,
+    ManagerButtonComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
-    MaterialProxyModule
   ],
   exports: [
-    InputComponent
+    ProjectCardComponent,
+    EmployeeCardComponent,
+    ManagerButtonComponent,
   ]
 })
 export class CoreModule { }

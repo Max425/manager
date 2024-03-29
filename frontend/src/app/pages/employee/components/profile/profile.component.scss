@@ -1,0 +1,42 @@
+.employee-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Чтобы блоки .employee-info и .actions были выровнены по верхнему краю */
+
+  .employee-info {
+    display: flex;
+    flex-direction: column; /* Располагаем элементы в колонку */
+
+    .employee-image {
+      width: 500px;
+      border-radius: 5px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: max-content 1fr; /* Определяем две колонки: первая для меток, вторая для инпутов */
+      gap: 10px; /* Отступ между элементами формы */
+
+      label {
+        align-self: center; /* Выравниваем метки по центру по вертикали */
+      }
+
+      input[type="text"] {
+        width: 100%; /* Занимаем всю доступную ширину */
+      }
+
+      p {
+        margin: 5px 0;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center; /* Выравниваем кнопки по вертикали */
+
+    button {
+      margin-left: 10px;
+    }
+  }
+}

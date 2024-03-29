@@ -362,6 +362,37 @@ paths:
       summary: Возвращает информацию о сотруднике по ID
       tags:
       - Employee
+  /api/employees/{id}/projects:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает проекты сотрудника по его ID.
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получены проекты
+          schema:
+            items:
+              $ref: '#/definitions/dto.Project'
+            type: array
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает проекты сотрудника по его ID.
+      tags:
+      - Employee
   /api/projects:
     post:
       consumes:
@@ -481,6 +512,37 @@ paths:
           schema:
             type: string
       summary: Возвращает информацию о проекте по ID
+      tags:
+      - Project
+  /api/projects/{id}/employees:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает сотрудников проекта по ID.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получены сотрудники
+          schema:
+            items:
+              $ref: '#/definitions/dto.Employee'
+            type: array
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает сотрудников проекта по ID
       tags:
       - Project
 swagger: "2.0"

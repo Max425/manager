@@ -1,0 +1,12 @@
+<div class="card" [routerLink]="['/project', project.id]"> <!-- Изменение ссылки на проект -->
+  <img [src]="project.image" alt="{{project.name}}" class="card-image"> <!-- Использование свойств проекта -->
+  <div class="card-content">
+    <h4>{{project.name}}</h4>
+    <p>Description: {{project.description}}</p> <!-- Описание проекта -->
+    <p>Complexity: {{project.complexity}}</p> <!-- Сложность проекта -->
+    <p>Current Stage: {{project.current_stage}}</p> <!-- Текущий этап проекта -->
+    <p>Deadline: {{project.deadline}}</p> <!-- Срок завершения проекта -->
+    <p>Status: {{project.status}}</p> <!-- Статус проекта -->
+    <!-- Добавьте другие поля по мере необходимости -->
+  </div>
+</div>

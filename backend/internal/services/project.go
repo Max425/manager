@@ -12,6 +12,7 @@ type ProjectRepository interface {
 	FindProjectsByCompanyID(ctx context.Context, companyID int) ([]*core.Project, error)
 	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
+	GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error)
 }
 
 type ProjectService struct {
@@ -29,6 +30,10 @@ func (s *ProjectService) CreateProject(ctx context.Context, project *core.Projec
 
 func (s *ProjectService) GetProjectByID(ctx context.Context, id int) (*core.Project, error) {
 	return s.projectRepo.FindProjectByID(ctx, id)
+}
+
+func (s *ProjectService) GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error) {
+	return s.projectRepo.GetProjectEmployees(ctx, id)
 }
 
 func (s *ProjectService) GetProjectsByCompanyID(ctx context.Context, companyID int) ([]*core.Project, error) {

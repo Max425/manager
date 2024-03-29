@@ -56,6 +56,21 @@ func (pr *ProjectRepository) FindProjectsByCompanyID(ctx context.Context, compan
 	return projects, nil
 }
 
+func (pr *ProjectRepository) GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error) {
+	var employees []*core.Employee
+	err := pr.db.SelectContext(ctx, &employees, `select * from employee
+							where id in (select employee_id from employee_project
+             								where project_id = $1);`, id)
+	if err != nil {
+		pr.log.Error("Error finding projects by company ID", slog.String("error", err.Error()))
+		return nil, core.ErrInternal
+	}
+	if len(employees) == 0 {
+		return nil, core.ErrNotFound
+	}
+	return employees, nil
+}
+
 func (pr *ProjectRepository) UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error) {
 	_, err := pr.db.ExecContext(ctx, "UPDATE project SET company_id=$1, name=$2, stages=$3, image=$4, description=$5, current_stage=$6, deadline=$7, status=$8, complexity=$9 WHERE id=$10",
 		project.CompanyID, project.Name, project.Stages, project.Image, project.Description, project.CurrentStage, project.Deadline, project.Status, project.Complexity, project.ID)

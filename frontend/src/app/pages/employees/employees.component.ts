@@ -5,10 +5,10 @@ import {Employee} from "../../shared/models/entity/employee";
 
 @Component({
   selector: 'woodpecker-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  templateUrl: './employees.component.html',
+  styleUrls: ['./employees.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class EmployeesComponent implements OnInit {
   public filteredEmployees: Employee[] = [];
   private _treeData = new BehaviorSubject<Employee[]>([]);
 

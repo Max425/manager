@@ -1,32 +1,10 @@
-<div class="employee-details">
-  <div class="employee-info">
-    <img [src]="employee.image" alt="{{employee.name}}" class="employee-image">
-    <form>
-      <div>
-        <label>Имя:</label>
-        <input type="text" pInputText [(ngModel)]="employee.name" name="name" [disabled]="!editing">
-      </div>
-      <div>
-        <label>Роль:</label>
-        <input type="text" pInputText [(ngModel)]="employee.position" name="position" [disabled]="!editing">
-      </div>
-      <div>
-        <label>Почта:</label>
-        <input type="text" pInputText [(ngModel)]="employee.mail" name="mail" [disabled]="!editing">
-      </div>
-      <p>Активных проектов: {{employee.active_projects_count}}</p>
-      <p>Просрочено проектов: {{employee.overdue_projects_count}}</p>
-      <p>Всего проектов: {{employee.total_projects_count}}</p>
-      <p>Рейтинг: {{employee.rating}}</p>
-    </form>
-    <button *ngIf="editing" pButton type="button" label="Сохранить"
-            class="p-button-outlined p-button-rounded p-button-sm p-button-success"
-            (click)="saveEmployee()"></button>
-    <button pButton type="button" [label]="editing ? 'Отмена' : 'Редактировать'"
-            class="p-button-outlined p-button-rounded p-button-sm p-button-secondary"
-            (click)="toggleEditing()"></button>
-    <button pButton type="button" label="Удалить"
-            class="p-button-outlined p-button-rounded p-button-sm p-button-secondary"
-            (click)="deleteEmployee()"></button>
-  </div>
+<app-employee-profile [employee]="employee"></app-employee-profile>
+
+<div *ngIf="projects.length > 0; else noResults">
+    <div class="card-container">
+        <app-project-card *ngFor="let project of projects" [project]="project"></app-project-card>
+    </div>
 </div>
+<ng-template #noResults>
+    <p>No projects.</p>
+</ng-template>

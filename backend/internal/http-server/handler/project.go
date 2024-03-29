@@ -19,6 +19,7 @@ type ProjectService interface {
 	GetProjectsByCompanyID(ctx context.Context, companyID int) ([]*core.Project, error)
 	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
+	GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error)
 }
 
 type ProjectHandler struct {
@@ -98,6 +99,44 @@ func (h *ProjectHandler) GetProject(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, convert.ProjectCoreToDto(project))
+}
+
+// GetProjectEmployees возвращает сотрудников проекта по ID.
+// @Summary Возвращает сотрудников проекта по ID
+// @Description Возвращает сотрудников проекта по ID.
+// @Tags Project
+// @Accept json
+// @Produce json
+// @Param id path int true "ID проекта"
+// @Success 200 {object} []dto.Employee "Успешно получены сотрудники"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/projects/{id}/employees [get]
+func (h *ProjectHandler) GetProjectEmployees(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	employees, err := h.projectService.GetProjectEmployees(c.Request.Context(), id)
+	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error getting project", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+
+	var dtoEmployees []*dto.Employee
+	for _, employee := range employees {
+		dtoEmployees = append(dtoEmployees, convert.EmployeeCoreToDto(employee))
+	}
+
+	c.JSON(http.StatusOK, dtoEmployees)
 }
 
 // GetProjectsByCompanyID возвращает все проекты компании по ее ID из контекста.

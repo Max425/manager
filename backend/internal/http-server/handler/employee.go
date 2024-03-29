@@ -19,6 +19,7 @@ type EmployeeService interface {
 	GetEmployeesByCompanyID(ctx context.Context, companyID int) ([]*core.Employee, error)
 	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
+	GetEmployerProjects(ctx context.Context, id int) ([]*core.Project, error)
 }
 
 type EmployeeHandler struct {
@@ -98,6 +99,44 @@ func (h *EmployeeHandler) GetEmployee(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, convert.EmployeeCoreToDto(employee))
+}
+
+// GetEmployerProjects возвращает проекты сотрудника по его ID.
+// @Summary Возвращает проекты сотрудника по его ID.
+// @Description Возвращает проекты сотрудника по его ID.
+// @Tags Employee
+// @Accept json
+// @Produce json
+// @Param id path int true "ID сотрудника"
+// @Success 200 {object} []dto.Project "Успешно получены проекты"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/employees/{id}/projects [get]
+func (h *EmployeeHandler) GetEmployerProjects(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	projects, err := h.employeeService.GetEmployerProjects(c.Request.Context(), id)
+	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error getting employer projects", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+
+	var dtoProjects []*dto.Project
+	for _, project := range projects {
+		dtoProjects = append(dtoProjects, convert.ProjectCoreToDto(project))
+	}
+
+	c.JSON(http.StatusOK, dtoProjects)
 }
 
 // GetEmployeesByCompanyID возвращает всех сотрудников компании по ее ID из контекста.

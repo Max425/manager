@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EmployeeService} from './services/employee.service';
-import {Employee} from '../../shared/models/entity/employee';
 import {firstValueFrom} from "rxjs";
+import {Employee} from "../../shared/models/entity/employee";
+import {EmployeeService} from "./services/employee.service";
+import {Project} from "../../shared/models/entity/project";
 
 @Component({
   selector: 'app-employee',
@@ -11,8 +12,7 @@ import {firstValueFrom} from "rxjs";
 })
 export class EmployeeComponent implements OnInit {
   public employee!: Employee;
-  public editing: boolean = false;
-  originalEmployee!: Employee;
+  public projects!: Project[];
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +23,7 @@ export class EmployeeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getEmployee();
+    await this.getEmployeeProjects();
   }
 
   public async getEmployee() {
@@ -32,30 +33,11 @@ export class EmployeeComponent implements OnInit {
     this.employee = await firstValueFrom((this.api.getEmployeeById(id)));
   }
 
-  toggleEditing(): void {
-    if (this.editing) {
-      // Если режим редактирования отключается, сбросить изменения
-      this.employee = {...this.originalEmployee};
-    } else {
-      // Если режим редактирования включается, сохранить оригинальные данные
-      this.originalEmployee = {...this.employee};
-    }
-    this.editing = !this.editing;
-  }
 
-  saveEmployee(): void {
-    if (!this.employee) return;
-    this.api.updateEmployee(this.employee).subscribe(() => {
-      this.editing = false;
-    });
-  }
-
-  deleteEmployee(): void {
-    if (confirm('Are you sure you want to delete this employee?')) {
-      this.api.deleteEmployee(this.employee.id)
-        .subscribe(() => {
-          this.router.navigate(['/employees']);
-        });
-    }
+  public async getEmployeeProjects() {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam === null) return;
+    const id = +idParam;
+    this.projects = await firstValueFrom((this.api.getEmployeeProjects(id)));
   }
 }

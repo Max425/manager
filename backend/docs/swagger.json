@@ -451,6 +451,53 @@
                 }
             }
         },
+        "/api/employees/{id}/projects": {
+            "get": {
+                "description": "Возвращает проекты сотрудника по его ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Возвращает проекты сотрудника по его ID.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID сотрудника",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получены проекты",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.Project"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/projects": {
             "put": {
                 "description": "Обновляет информацию о проекте с указанным ID новыми данными.",
@@ -617,6 +664,53 @@
                         "description": "Успешное удаление проекта",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projects/{id}/employees": {
+            "get": {
+                "description": "Возвращает сотрудников проекта по ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Возвращает сотрудников проекта по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID проекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно получены сотрудники",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.Employee"
+                            }
                         }
                     },
                     "400": {

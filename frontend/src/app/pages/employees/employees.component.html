@@ -4,7 +4,7 @@
 
 <div *ngIf="filteredEmployees.length > 0; else noResults">
   <div class="card-container">
-    <app-card *ngFor="let employee of filteredEmployees" [employee]="employee"></app-card>
+    <app-employee-card *ngFor="let employee of filteredEmployees" [employee]="employee"></app-employee-card>
   </div>
 </div>
 
