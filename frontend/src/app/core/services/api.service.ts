@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Login} from "../../shared/models/auth/login-credential";
 import {Session} from "../../shared/models/auth/session";
-import {ClientResponse} from "../../shared/models/client-response";
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +14,10 @@ export class ApiService {
     protected readonly http: HttpClient,
     ) { }
 
-  public getSessionUser(login: Login): Observable<ClientResponse<Session>> {
+  public getSessionUser(login: Login): Observable<Session> {
     const url = `${this._url}/login`;
 
-    return this.http.post<ClientResponse<Session>>(url, login);
+    return this.http.post<Session>(url, login);
   }
 
   public deleteSession(session: Session): Observable<Session> {
