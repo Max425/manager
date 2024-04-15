@@ -1,13 +1,14 @@
 <div class="login-form-main" (keydown.enter)="onLogin()">
   <div class="login-form">
     <div class="login-form-text-header">
-      <h1>Qedr.Woodpecker</h1>
-      <h1>Вход в панель администратора</h1>
+      <h1>Manager platform</h1>
+      <h1>Вход в учетную запись</h1>
     </div>
     <div class="login-form-body" [formGroup]="authForm">
-      <input tabindex="1"  name="login" formControlName="login" placeholder="Введите логин" type="text"
+      <input tabindex="1" name="login" formControlName="login" placeholder="Введите логин" type="text"
              autofocus>
-      <input name="password" formControlName="password" tabindex="2" placeholder="Введите пароль" [type]="isPasswordHidden ? 'password' : 'text'">
+      <input name="password" formControlName="password" tabindex="2" placeholder="Введите пароль"
+             [type]="isPasswordHidden ? 'password' : 'text'">
       <button (click)="onLogin()">Войти</button>
     </div>
   </div>

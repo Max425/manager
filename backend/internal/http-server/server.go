@@ -65,6 +65,7 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 			projects.PUT("", projectHandler.UpdateProject)
 			projects.DELETE("/:id", projectHandler.DeleteProject)
 			projects.GET("/:id/employees", projectHandler.GetProjectEmployees)
+			projects.POST("/:id/employees", projectHandler.AddEmployeeToProject)
 		}
 	}
 

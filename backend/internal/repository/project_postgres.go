@@ -89,3 +89,15 @@ func (pr *ProjectRepository) DeleteProject(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (pr *ProjectRepository) AddEmployeeToProject(ctx context.Context, companyId int, employees []int) error {
+	query := "INSERT INTO employee_project (project_id, employee_id) VALUES ($1, $2)"
+	for _, employeeID := range employees {
+		_, err := pr.db.ExecContext(ctx, query, companyId, employeeID)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

@@ -545,4 +545,40 @@ paths:
       summary: Возвращает сотрудников проекта по ID
       tags:
       - Project
+    post:
+      consumes:
+      - application/json
+      description: Добавляет сотрудника в проект.
+      parameters:
+      - description: ID проекта
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID сотрудников
+        in: body
+        name: project
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Всё хорошо
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Добавляет сотрудника в проект
+      tags:
+      - Project
 swagger: "2.0"

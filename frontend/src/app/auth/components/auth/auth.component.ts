@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit {
   }
 
   public async redirectOnLogin(): Promise<void> {
-    const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/admin';
+    const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/employees';
     await this.router.navigateByUrl(redirect);
   }
 

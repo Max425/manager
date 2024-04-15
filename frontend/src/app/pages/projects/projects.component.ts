@@ -35,4 +35,6 @@ export class ProjectsComponent implements OnInit {
       );
     });
   }
+
+  protected readonly console = console;
 }

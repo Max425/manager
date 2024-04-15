@@ -1,5 +1,5 @@
 <div class="user-main">
-  <nav *ngIf="(auth.sessionStarted | async)!.user as user">
+  <nav *ngIf="auth.sessionStarted as user">
     <div [matMenuTriggerFor]="menu" class="user-data">
       <div class="user">
         <img class="avatar" src="./assets/profile-circle.svg" alt="avatar">

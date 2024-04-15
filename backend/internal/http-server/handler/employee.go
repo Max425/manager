@@ -150,7 +150,7 @@ func (h *EmployeeHandler) GetEmployerProjects(c *gin.Context) {
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies/employees [get]
 func (h *EmployeeHandler) GetEmployeesByCompanyID(c *gin.Context) {
-	companyID := 1 //c.Value("company_id").(int)
+	companyID := 1 //c.Value("company_id").(int) //TODO: fix
 
 	employees, err := h.employeeService.GetEmployeesByCompanyID(c.Request.Context(), companyID)
 	if err != nil {

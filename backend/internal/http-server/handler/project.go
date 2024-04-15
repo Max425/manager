@@ -20,6 +20,7 @@ type ProjectService interface {
 	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
 	GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error)
+	AddEmployeeToProject(ctx context.Context, companyId int, employees []int) error
 }
 
 type ProjectHandler struct {
@@ -58,6 +59,7 @@ func (h *ProjectHandler) CreateProject(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	coreProject.CompanyID = 1 //TODO: fix
 	result, err := h.projectService.CreateProject(c.Request.Context(), coreProject)
 	if err != nil {
 		h.log.Error("Error creating project", slog.String("error", err.Error()))
@@ -150,7 +152,7 @@ func (h *ProjectHandler) GetProjectEmployees(c *gin.Context) {
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
 // @Router /api/companies/projects [get]
 func (h *ProjectHandler) GetProjectsByCompanyID(c *gin.Context) {
-	companyID := 1 //c.Value("company_id").(int)
+	companyID := 1 //c.Value("company_id").(int) //TODO: fix
 
 	projects, err := h.projectService.GetProjectsByCompanyID(c.Request.Context(), companyID)
 	if err != nil {
@@ -242,4 +244,44 @@ func (h *ProjectHandler) DeleteProject(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Project deleted"})
+}
+
+// AddEmployeeToProject добавляет сотрудника в проект.
+// @Summary Добавляет сотрудника в проект
+// @Description Добавляет сотрудника в проект.
+// @Tags Project
+// @Accept json
+// @Produce json
+// @Param id path int true "ID проекта"
+// @Param project body []int true "ID сотрудников"
+// @Success 200 {object} string "Всё хорошо"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/projects/{id}/employees [post]
+func (h *ProjectHandler) AddEmployeeToProject(c *gin.Context) {
+	var employees []int
+	if err := c.BindJSON(&employees); err != nil {
+		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		h.log.Error("Error converting id", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+
+	err = h.projectService.AddEmployeeToProject(c.Request.Context(), id, employees)
+	if err != nil {
+		if errors.Is(err, core.ErrNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": common.ErrNotFound.String()})
+			return
+		}
+		h.log.Error("Error getting project", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+	c.JSON(http.StatusOK, "Employee add")
 }

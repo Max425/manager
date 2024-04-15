@@ -4,6 +4,7 @@ import {BehaviorSubject, filter, firstValueFrom, fromEvent, map} from "rxjs";
 import {Session} from "../../shared/models/auth/session";
 import {Login} from "../../shared/models/auth/login-credential";
 import {ApiService} from "../../core/services/api.service";
+import {User} from "../../shared/models/auth/user";
 
 @Injectable({
     providedIn: 'root'
@@ -67,14 +68,9 @@ export class AuthService {
         }
     }
 
-    public sessionStarted = this.currentSessionObservable.pipe(
-        filter(session => {
-            return !!session;
-        }),
-        map(session => {
-            return session as Session;
-        })
-    );
+    public sessionStarted: User = {
+      userName: 'Максим'
+};
 
     public get isAuthed(): boolean {
         return !!this.currentSession.value;

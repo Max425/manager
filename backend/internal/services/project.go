@@ -13,6 +13,7 @@ type ProjectRepository interface {
 	UpdateProject(ctx context.Context, project *core.Project) (*core.Project, error)
 	DeleteProject(ctx context.Context, id int) error
 	GetProjectEmployees(ctx context.Context, id int) ([]*core.Employee, error)
+	AddEmployeeToProject(ctx context.Context, companyId int, employees []int) error
 }
 
 type ProjectService struct {
@@ -56,4 +57,8 @@ func (s *ProjectService) DeleteProject(ctx context.Context, id int) error {
 	}
 
 	return s.projectRepo.DeleteProject(ctx, id)
+}
+
+func (s *ProjectService) AddEmployeeToProject(ctx context.Context, companyId int, employees []int) error {
+	return s.projectRepo.AddEmployeeToProject(ctx, companyId, employees)
 }

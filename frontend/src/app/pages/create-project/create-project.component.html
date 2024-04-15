@@ -1,0 +1,29 @@
+<div class="p-fluid">
+  <div class="p-field">
+    <label for="name">Name</label>
+    <input type="text" id="name" [(ngModel)]="project.name" pInputText/>
+  </div>
+  <div class="p-field">
+    <label for="description">Description</label>
+    <textarea id="description" [(ngModel)]="project.description" pInputTextarea></textarea>
+  </div>
+  <div class="p-field">
+    <label for="complexity">Complexity</label>
+    <p-inputNumber id="complexity" [(ngModel)]="project.complexity" inputId="minmax" mode="decimal" [min]="1"
+                   [max]="10"></p-inputNumber>
+  </div>
+  <div class="p-field">
+    <label for="deadline">Deadline</label>
+    <p-calendar id="deadline" [(ngModel)]="project.deadline" dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
+  </div>
+  <div class="p-field">
+    <label for="stages">Stages</label>
+    <div id="stages" *ngFor="let stage of project.stages; let i = index" class="p-inputgroup">
+      <input type="text" [(ngModel)]="project.stages[i]" pInputText/>
+      <button type="button" pButton icon="pi pi-minus" (click)="removeStage(i)" class="p-button-danger"
+              *ngIf="project.stages.length > 1"></button>
+    </div>
+    <button type="button" (click)="addStage()" pButton label="Add Stage"></button>
+  </div>
+  <button type="button" (click)="createProject()" pButton label="Create"></button>
+</div>
