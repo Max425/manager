@@ -1,3 +1,13 @@
 :host {
-  width: 80%
+  margin-top: 30px;
+  margin-left: 90px;
+  margin-right: 90px;
+
+  .fixed-button {
+    margin-top: 100px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    /*z-index: 9999;*/
+  }
 }

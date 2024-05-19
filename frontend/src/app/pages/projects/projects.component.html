@@ -1,6 +1,6 @@
 <div class="search-bar">
   <input type="text" pInputText placeholder="Поиск" (input)="filterProjects($event)"/>
-  <app-manager-button text="Создать проект" [routerLink]="['/create-project']"></app-manager-button>
+  <button label="Создать проект" [routerLink]="['/create-project']" pButton></button>
 </div>
 
 <div *ngIf="filteredProjects.length > 0; else noResults">

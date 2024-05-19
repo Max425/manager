@@ -36,4 +36,6 @@ export class EmployeesComponent implements OnInit {
       );
     });
   }
+
+    protected readonly console = console;
 }

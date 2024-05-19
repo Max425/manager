@@ -71,6 +71,28 @@ info:
   version: "1.0"
 paths:
   /api/companies:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о компании по указанному ID.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешно получена компания
+          schema:
+            $ref: '#/definitions/dto.Company'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Возвращает информацию о компании по ID
+      tags:
+      - Company
     post:
       consumes:
       - application/json
@@ -161,34 +183,6 @@ paths:
           schema:
             type: string
       summary: Удаляет компанию по ID
-      tags:
-      - Company
-    get:
-      consumes:
-      - application/json
-      description: Возвращает информацию о компании по указанному ID.
-      parameters:
-      - description: ID компании
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешно получена компания
-          schema:
-            $ref: '#/definitions/dto.Company'
-        "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            type: string
-      summary: Возвращает информацию о компании по ID
       tags:
       - Company
   /api/companies/employees:

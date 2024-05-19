@@ -1,13 +1,14 @@
 <div class="search-bar">
-  <input type="text" pInputText placeholder="Поиск" (input)="filterEmployees($event)"/>
+    <input type="text" pInputText placeholder="Поиск" (input)="filterEmployees($event)"/>
+    <button label="Пригласить сотрудника" (click)="console.log('link')" pButton></button>
 </div>
 
 <div *ngIf="filteredEmployees.length > 0; else noResults">
-  <div class="card-container">
-    <app-employee-card *ngFor="let employee of filteredEmployees" [employee]="employee"></app-employee-card>
-  </div>
+    <div class="card-container">
+        <app-employee-card *ngFor="let employee of filteredEmployees" [employee]="employee"></app-employee-card>
+    </div>
 </div>
 
 <ng-template #noResults>
-  <p>No results found.</p>
+    <p>No results found.</p>
 </ng-template>

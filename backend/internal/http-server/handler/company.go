@@ -72,18 +72,18 @@ func (h *CompanyHandler) CreateCompany(c *gin.Context) {
 // @Tags Company
 // @Accept json
 // @Produce json
-// @Param id path int true "ID компании"
 // @Success 200 {object} dto.Company "Успешно получена компания"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Failure 500 {object} string "Внутренняя ошибка сервера"
-// @Router /api/companies/{id} [get]
+// @Router /api/companies [get]
 func (h *CompanyHandler) GetCompany(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		h.log.Error("Error converting id", slog.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
-		return
-	}
+	id := 1 //TODO: fix
+	//id, err := strconv.Atoi(c.Param("id"))
+	//if err != nil {
+	//	h.log.Error("Error converting id", slog.String("error", err.Error()))
+	//	c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+	//	return
+	//}
 
 	company, err := h.companyService.GetCompanyByID(c.Request.Context(), id)
 	if err != nil {

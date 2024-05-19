@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from "../../shared/models/entity/project";
+import {CreateProjectService} from "./services/create-project.service";
+import {firstValueFrom} from "rxjs";
+import {Company} from "../../shared/models/entity/company";
 
 @Component({
   selector: 'app-create-project',
@@ -15,10 +18,18 @@ export class CreateProjectComponent implements OnInit {
     name: '',
     stages: ['']
   };
+  choosePositions: string[] = [''];
+  company!: Company;
 
-  constructor() { }
+  constructor(private api: CreateProjectService) {
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.getCompany();
+  }
+
+  public async getCompany() {
+    this.company = await firstValueFrom((this.api.getCompany()));
   }
 
   addStage(): void {
@@ -29,7 +40,22 @@ export class CreateProjectComponent implements OnInit {
     this.project.stages.splice(index, 1);
   }
 
+  addPositions(): void {
+    this.choosePositions.push('');
+  }
+
+  removePositions(index: number): void {
+    this.choosePositions.splice(index, 1);
+  }
+
   createProject(): void {
     console.log(this.project);
+    this.api.createProject(this.project).subscribe(data => {
+      if (data.status === 200) {
+        console.log(`status: ${data.status}\nmessage: ${data}`);
+      } else {
+        console.log(`status: ${data.status}\nmessage: ${data}`);
+      }
+    });
   }
 }

@@ -16,6 +16,39 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/companies": {
+            "get": {
+                "description": "Возвращает информацию о компании по указанному ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Возвращает информацию о компании по ID",
+                "responses": {
+                    "200": {
+                        "description": "Успешно получена компания",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Обновляет информацию о компании с указанным ID новыми данными.",
                 "consumes": [
@@ -189,48 +222,6 @@ const docTemplate = `{
             }
         },
         "/api/companies/{id}": {
-            "get": {
-                "description": "Возвращает информацию о компании по указанному ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Возвращает информацию о компании по ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID компании",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешно получена компания",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Company"
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Удаляет компанию с указанным ID.",
                 "consumes": [

@@ -18,36 +18,37 @@ import {EmployeeComponent} from "./employee/employee.component";
 import {ProjectsComponent} from "./projects/projects.component";
 import {CreateProjectComponent} from './create-project/create-project.component';
 import {InputNumberModule} from "primeng/inputnumber";
-
+import {DropdownModule} from 'primeng/dropdown';
 
 @NgModule({
-  declarations: [
-    ProjectsComponent,
-    EmployeesComponent,
-    ProfileComponent,
-    EmployeeComponent,
-    HomeComponent,
-    CreateProjectComponent,
-  ],
-  exports: [],
-  imports: [
-    CommonModule,
-    CoreModule,
-    PageRoutingModule,
-    NavigationModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    FormsModule,
-    CardModule,
-    InputTextareaModule,
-    CalendarModule,
-    CheckboxModule,
-    InputNumberModule,
-  ],
-  providers: [
-    {provide: MAT_DATE_LOCALE, useValue: "ru-RU"},
-  ]
+    declarations: [
+        ProjectsComponent,
+        EmployeesComponent,
+        ProfileComponent,
+        EmployeeComponent,
+        HomeComponent,
+        CreateProjectComponent,
+    ],
+    exports: [],
+    imports: [
+        CommonModule,
+        CoreModule,
+        PageRoutingModule,
+        NavigationModule,
+        ReactiveFormsModule,
+        ButtonModule,
+        InputTextModule,
+        FormsModule,
+        CardModule,
+        InputTextareaModule,
+        CalendarModule,
+        CheckboxModule,
+        InputNumberModule,
+        DropdownModule,
+    ],
+    providers: [
+        {provide: MAT_DATE_LOCALE, useValue: "ru-RU"},
+    ]
 })
 export class PagesModule {
 }
