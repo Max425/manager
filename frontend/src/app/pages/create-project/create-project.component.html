@@ -1,39 +1,68 @@
 <div class="p-fluid">
-    <div class="p-field">
-        <label for="name">Название</label>
-        <input type="text" id="name" [(ngModel)]="project.name" pInputText/>
+  <div class="p-field">
+    <label for="name">Название</label>
+    <input type="text" id="name" [(ngModel)]="project.name" pInputText/>
+  </div>
+  <div class="p-field">
+    <label for="description">Описание</label>
+    <textarea id="description" [(ngModel)]="project.description" pInputTextarea></textarea>
+  </div>
+  <div class="p-field">
+    <label for="complexity">Сложность (от 1 до 10)</label>
+    <p-inputNumber id="complexity" [(ngModel)]="project.complexity" inputId="minmax" mode="decimal" [min]="1"
+                   [max]="10"></p-inputNumber>
+  </div>
+  <div class="p-field">
+    <label for="deadline">Дедлайн</label>
+    <p-calendar id="deadline" [(ngModel)]="project.deadline" dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
+  </div>
+  <div class="p-field">
+    <label for="stages">Стадии проекта</label>
+    <div id="stages" *ngFor="let stage of project.stages; let i = index">
+      <input type="text" [(ngModel)]="project.stages[i]" pInputText/>
+      <button type="button" pButton icon="pi pi-minus" (click)="removeStage(i)" class="p-button-danger"
+              *ngIf="project.stages.length > 1"></button>
     </div>
-    <div class="p-field">
-        <label for="description">Описание</label>
-        <textarea id="description" [(ngModel)]="project.description" pInputTextarea></textarea>
+    <button type="button" (click)="addStage()" pButton label="Добавить стадию"></button>
+  </div>
+  <div class="p-field">
+    <label for="employees">Исполнители (записывайте их в порядке приоритета)</label>
+    <div id="employees" *ngFor="let stage of choosePositions; let i = index" class="p-inputgroup">
+
+      <p-dropdown
+        [options]="this.company.positions"
+        [(ngModel)]="choosePositions[i].position"
+        [showClear]="true"
+        [style]="{ minWidth: '14rem' }" placeholder="Выбирете роль">
+      </p-dropdown>
+
+      <p-dropdown
+        [options]="chooseEmployees(i)"
+        [(ngModel)]="choosePositions[i].employee"
+        optionLabel="name"
+        [showClear]="true"
+        placeholder="Выбирете сотрудника"
+        [style]="{ minWidth: '14rem' }">
+      </p-dropdown>
+
+      <span class="checkbox-label">{{ choosePositions[i].pin ? 'Закреплен' : 'Не закреплен' }}</span>
+      <p-checkbox
+        [(ngModel)]="choosePositions[i].pin"
+        [binary]="true"
+        inputId="binary"/>
+
+      <div *ngIf="choosePositions[i].employee">
+        <a [routerLink]="['/employee', choosePositions[i].employee?.id]" target="_blank">Перейти к сотруднику</a>
+      </div>
+      <div *ngIf="!choosePositions[i].employee">Сотрудник не выбран</div>
+
+      <button type="button" pButton icon="pi pi-minus" (click)="removePositions(i)" class="p-button-danger"
+              *ngIf="choosePositions.length > 1"></button>
     </div>
-    <div class="p-field">
-        <label for="complexity">Сложность (от 1 до 10)</label>
-        <p-inputNumber id="complexity" [(ngModel)]="project.complexity" inputId="minmax" mode="decimal" [min]="1"
-                       [max]="10"></p-inputNumber>
+    <div class="buttons">
+      <button type="button" (click)="addPositions()" pButton label="Добавить исполнителя"></button>
+      <button type="button" (click)="autoChooseEmployees()" pButton label="Автоматически подобрать сотрудников"></button>
     </div>
-    <div class="p-field">
-        <label for="deadline">Дедлайн</label>
-        <p-calendar id="deadline" [(ngModel)]="project.deadline" dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
-    </div>
-    <div class="p-field">
-        <label for="stages">Стадии проекта</label>
-        <div id="stages" *ngFor="let stage of project.stages; let i = index" class="p-inputgroup">
-            <input type="text" [(ngModel)]="project.stages[i]" pInputText/>
-            <button type="button" pButton icon="pi pi-minus" (click)="removeStage(i)" class="p-button-danger"
-                    *ngIf="project.stages.length > 1"></button>
-        </div>
-        <button type="button" (click)="addStage()" pButton label="Добавить стадию"></button>
-    </div>
-    <div class="p-field">
-        <label for="employees">Исполнители (записывайте их в порядке приоритета)</label>
-        <div id="employees" *ngFor="let stage of choosePositions; let i = index" class="p-inputgroup">
-            <p-dropdown [options]="this.company.positions" [(ngModel)]="choosePositions[i]"
-                        [style]="{ minWidth: '14rem' }" placeholder="Выбирете роль"></p-dropdown>
-            <button type="button" pButton icon="pi pi-minus" (click)="removePositions(i)" class="p-button-danger"
-                    *ngIf="choosePositions.length > 1"></button>
-        </div>
-        <button type="button" (click)="addPositions()" pButton label="Добавить исполнителя"></button>
-    </div>
+  </div>
 </div>
 <button type="button" (click)="createProject()" pButton label="Создать проект" class="fixed-button"></button>

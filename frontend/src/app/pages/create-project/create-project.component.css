@@ -3,6 +3,18 @@
   margin-left: 90px;
   margin-right: 90px;
 
+  #employees {
+    display: flex;
+    align-items: start;
+    gap: 5px; /* Отступ между элементами */
+  }
+
+  .buttons {
+    display: flex;
+    align-items: start;
+    gap: 10px; /* Отступ между элементами */
+  }
+
   .fixed-button {
     margin-top: 100px;
     bottom: 20px;

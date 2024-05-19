@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/Max425/manager/internal/model/common"
 	"github.com/Max425/manager/internal/model/convert"
 	"github.com/Max425/manager/internal/model/core"
@@ -20,6 +21,7 @@ type EmployeeService interface {
 	UpdateEmployee(ctx context.Context, employee *core.Employee) (*core.Employee, error)
 	DeleteEmployee(ctx context.Context, id int) error
 	GetEmployerProjects(ctx context.Context, id int) ([]*core.Project, error)
+	GetAutoEmployees(ctx context.Context, autoEmployees dto.AutoEmployees, companyID int) ([]dto.AutoEmployee, error)
 }
 
 type EmployeeHandler struct {
@@ -242,4 +244,34 @@ func (h *EmployeeHandler) DeleteEmployee(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Employee deleted"})
+}
+
+// AutoEmployees создает нового сотрудника.
+// @Summary Создает нового сотрудника
+// @Description Создает нового сотрудника с заданными данными.
+// @Tags Employee
+// @Accept json
+// @Produce json
+// @Param employee body dto.AutoEmployees true "Данные нового проекта"
+// @Success 200 {object} dto.AutoEmployee "Рекомендуемые сотрудники"
+// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Failure 500 {object} string "Внутренняя ошибка сервера"
+// @Router /api/employees/auto [post]
+func (h *EmployeeHandler) AutoEmployees(c *gin.Context) {
+	companyID := 1 //c.Value("company_id").(int) //TODO: fix
+	var autoEmployees dto.AutoEmployees
+	h.log.Debug(fmt.Sprintf("%v", autoEmployees))
+	if err := c.BindJSON(&autoEmployees); err != nil {
+		h.log.Error("Error binding JSON", slog.String("error", err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": common.ErrBadRequest.String()})
+		return
+	}
+	result, err := h.employeeService.GetAutoEmployees(c.Request.Context(), autoEmployees, companyID)
+	if err != nil {
+		h.log.Error("Error get auto employees", slog.String("error", err.Error()))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": common.ErrInternal.String()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }

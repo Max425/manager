@@ -57,6 +57,7 @@ func NewHttpServer(log *slog.Logger, postgres config.PostgresConfig, listenAddr 
 			employees.PUT("", employeeHandler.UpdateEmployee)
 			employees.DELETE("/:id", employeeHandler.DeleteEmployee)
 			employees.GET("/:id/projects", employeeHandler.GetEmployerProjects)
+			employees.POST("/auto", employeeHandler.AutoEmployees)
 		}
 		projects := api.Group("/projects")
 		{
