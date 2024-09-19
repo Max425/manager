@@ -114,3 +114,18 @@ CREATE TRIGGER decrease_active_project_count
     FOR EACH ROW
     WHEN (OLD.status = 1 AND NEW.status = 0)
 EXECUTE FUNCTION decrease_active_project_count_trigger();
+
+
+update project
+set image = 'https://fikiwiki.com/uploads/posts/2022-02/1645039733_10-fikiwiki-com-p-kartinki-logotipov-10.jpg'
+where image = 'https://gas-kvas.com/grafic/uploads/posts/2024-01/gas-kvas-com-p-simvoli-dlya-logotipov-na-prozrachnom-fone-34.png';
+
+update employee
+set image = 'https://sun9-35.userapi.com/impg/163SluMCn4S9UKiRrQcDDsNXrQ5-pQ6cdq9lPA/Bsn8hG3-Pxc.jpg?size=1024x683&quality=96&sign=29394fc81284454fe65275574c9ad772&c_uniq_tag=2MaoO9ls7_6c-BOT7hqX_Nzkr5o7K5nGt6_jqcC-SV0&type=album'
+where image = 'https://get.pxhere.com/photo/outdoor-person-girl-sun-woman-hair-white-photography-cute-summer-female-portrait-model-young-red-fashion-lady-facial-expression-hairstyle-smiling-smile-long-hair-close-up-caucasian-face-dress-happy-happiness-eye-head-skin-beauty-attractive-photo-shoot-pretty-girl-brown-hair-cute-girl-happy-girl-happy-woman-portrait-photography-supermodel-683657.jpg';
+
+delete from employee
+where id = 45;
+
+delete from project
+where id = 5;

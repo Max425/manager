@@ -36,20 +36,22 @@ func chooseEmployee(allEmployees []*core.Employee, autoEmployee dto.AutoEmployee
 	employees := slices.FilterAll(allEmployees,
 		func(_ int, v *core.Employee) bool { return v.Position == autoEmployee.Position },
 	)
-	if len(employees) == 0 {
+	if len(employees) == 0 || len(employees) == 1 && autoEmployee.Employee.ID != 0 {
 		return autoEmployee
 	}
+
 	sort.Slice(employees, func(i, j int) bool {
 		return employees[i].ActiveProjectsCount < employees[j].ActiveProjectsCount
 	})
 
-	medianIndex := len(employees) / 2
-	employee := employees[0]
-
+	index := 0
 	if project.Complexity >= common.MinComplexity {
-		employee = employees[medianIndex]
+		index = len(employees) / 2
+	}
+	if employees[index].ID == autoEmployee.Employee.ID {
+		index++
 	}
 
-	autoEmployee.Employee = *convert.EmployeeCoreToDto(employee)
+	autoEmployee.Employee = *convert.EmployeeCoreToDto(employees[index])
 	return autoEmployee
 }
