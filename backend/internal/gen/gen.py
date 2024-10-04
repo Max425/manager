@@ -9,7 +9,7 @@ from faker import Faker
 fake = Faker()
 
 # Чтение конфигурации из config.yml
-with open('D:/study/sem6/manager/backend/configs/config.yml', 'r') as file:
+with open('/Users/msikanov/WebstormProjects/manager/backend/configs/config.yml', 'r') as file:
     config = yaml.safe_load(file)
 
 db_config = config['db']
