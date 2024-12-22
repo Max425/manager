@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./cmd/port-service/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./main.go
 
 # Create a minimal production image
 FROM alpine:latest

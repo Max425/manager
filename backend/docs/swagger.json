@@ -356,6 +356,52 @@
                 }
             }
         },
+        "/api/employees/auto": {
+            "post": {
+                "description": "Создает нового сотрудника с заданными данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Создает нового сотрудника",
+                "parameters": [
+                    {
+                        "description": "Данные нового проекта",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AutoEmployees"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Рекомендуемые сотрудники",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AutoEmployee"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка при обработке запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/employees/{id}": {
             "get": {
                 "description": "Возвращает информацию о сотруднике по указанному ID.",
@@ -775,6 +821,34 @@
         }
     },
     "definitions": {
+        "dto.AutoEmployee": {
+            "type": "object",
+            "properties": {
+                "employee": {
+                    "$ref": "#/definitions/dto.Employee"
+                },
+                "pin": {
+                    "type": "boolean"
+                },
+                "position": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AutoEmployees": {
+            "type": "object",
+            "properties": {
+                "auto_employee": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.AutoEmployee"
+                    }
+                },
+                "project": {
+                    "$ref": "#/definitions/dto.Project"
+                }
+            }
+        },
         "dto.Company": {
             "type": "object",
             "properties": {

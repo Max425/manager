@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  dto.AutoEmployee:
+    properties:
+      employee:
+        $ref: '#/definitions/dto.Employee'
+      pin:
+        type: boolean
+      position:
+        type: string
+    type: object
+  dto.AutoEmployees:
+    properties:
+      auto_employee:
+        items:
+          $ref: '#/definitions/dto.AutoEmployee'
+        type: array
+      project:
+        $ref: '#/definitions/dto.Project'
+    type: object
   dto.Company:
     properties:
       description:
@@ -385,6 +403,36 @@ paths:
           schema:
             type: string
       summary: Возвращает проекты сотрудника по его ID.
+      tags:
+      - Employee
+  /api/employees/auto:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового сотрудника с заданными данными.
+      parameters:
+      - description: Данные нового проекта
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AutoEmployees'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Рекомендуемые сотрудники
+          schema:
+            $ref: '#/definitions/dto.AutoEmployee'
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создает нового сотрудника
       tags:
       - Employee
   /api/projects:
