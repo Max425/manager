@@ -14,8 +14,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('../pages/pages.module').then(m => m.PagesModule),
-    // canActivate: [AuthGuard],
-    // canActivateChild: [AuthGuard]
+    canActivate: [NotAuthGuard],
+    canActivateChild: [NotAuthGuard]
   },
   {
     path: "**", component: NotFoundComponent
