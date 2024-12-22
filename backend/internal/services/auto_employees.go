@@ -41,13 +41,18 @@ func chooseEmployee(allEmployees []*core.Employee, autoEmployee dto.AutoEmployee
 	}
 
 	sort.Slice(employees, func(i, j int) bool {
+		return employees[i].Rating < employees[j].Rating
+	})
+
+	if project.Complexity >= common.MinComplexity {
+		employees = employees[len(employees)/2:]
+	}
+
+	sort.Slice(employees, func(i, j int) bool {
 		return employees[i].ActiveProjectsCount < employees[j].ActiveProjectsCount
 	})
 
 	index := 0
-	if project.Complexity >= common.MinComplexity {
-		index = len(employees) / 2
-	}
 	if employees[index].ID == autoEmployee.Employee.ID {
 		index++
 	}
