@@ -18,10 +18,14 @@ func CompanyDtoToCore(dtoCompany *dto.Company) (*core.Company, error) {
 }
 
 func CompanyCoreToDto(coreCompany *core.Company) *dto.Company {
+	roles := strings.Split(strings.Trim(coreCompany.Positions, "{}"), ",")
+	for i := 0; i < len(roles); i++ {
+		roles[i] = strings.Trim(roles[i], "\"")
+	}
 	return &dto.Company{
 		ID:          coreCompany.ID,
 		Name:        coreCompany.Name,
-		Positions:   strings.Split(strings.Trim(coreCompany.Positions, "{}"), ","),
+		Positions:   roles,
 		Image:       coreCompany.Image,
 		Description: coreCompany.Description,
 	}
