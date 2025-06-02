@@ -58,10 +58,10 @@ func (er *EmployeeRepository) FindEmployeesByCompanyID(ctx context.Context, comp
 func (er *EmployeeRepository) GetEmployerProjects(ctx context.Context, id int) ([]*core.Project, error) {
 	var projects []*core.Project
 	err := er.db.SelectContext(ctx, &projects, `select * from project 
-         							where id in (select project_id from employee_project 
+                                where id in (select project_id from employee_project 
                                         where employee_id = $1)`, id)
 	if err != nil {
-		er.log.Error("Error finding employees by company ID", slog.String("error", err.Error()))
+		er.log.Error("Error finding projects by employee ID", slog.String("error", err.Error()))
 		return nil, core.ErrInternal
 	}
 	if len(projects) == 0 {
@@ -78,6 +78,15 @@ func (er *EmployeeRepository) UpdateEmployee(ctx context.Context, employee *core
 		return nil, err
 	}
 	return er.FindEmployeeByID(ctx, employee.ID)
+}
+
+func (er *EmployeeRepository) AddRating(ctx context.Context, employeeID int, newRating float64) (*core.Employee, error) {
+	_, err := er.db.ExecContext(ctx, "UPDATE employee SET rating = array_append(rating, $1) WHERE id=$2", newRating, employeeID)
+	if err != nil {
+		er.log.Error("Error appending rating to employee", slog.String("error", err.Error()))
+		return nil, core.ErrInternal
+	}
+	return er.FindEmployeeByID(ctx, employeeID)
 }
 
 func (er *EmployeeRepository) DeleteEmployee(ctx context.Context, id int) error {

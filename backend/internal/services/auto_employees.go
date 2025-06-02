@@ -41,7 +41,7 @@ func chooseEmployee(allEmployees []*core.Employee, autoEmployee dto.AutoEmployee
 	}
 
 	sort.Slice(employees, func(i, j int) bool {
-		return employees[i].Rating < employees[j].Rating
+		return employees[i].Rating[len(employees[i].Rating)-1] < employees[j].Rating[len(employees[j].Rating)-1]
 	})
 
 	if project.Complexity >= common.MinComplexity {

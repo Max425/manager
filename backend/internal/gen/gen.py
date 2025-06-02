@@ -4,9 +4,12 @@ from random import choice, randint, sample
 from datetime import datetime, timedelta
 import yaml
 from faker import Faker
+import requests
+import base64
+import urllib.parse
 
-# Инициализация Faker
-fake = Faker()
+# Инициализация Faker с русской локализацией
+fake = Faker('ru_RU')
 
 # Чтение конфигурации из config.yml
 with open('/Users/msikanov/WebstormProjects/manager/backend/configs/config.yml', 'r') as file:
@@ -14,7 +17,7 @@ with open('/Users/msikanov/WebstormProjects/manager/backend/configs/config.yml',
 
 db_config = config['db']
 
-# Установите соединение с вашей базой данных PostgreSQL
+# Установите соединение с базой данных PostgreSQL
 conn = psycopg2.connect(
     dbname=db_config['dbname'],
     user=db_config['username'],
@@ -27,74 +30,121 @@ cursor = conn.cursor()
 
 # Вспомогательные данные
 roles = ["Младший backend разработчик", "Старший backend разработчик", "Младший frontend разработчик",
-         "Старший frontend разработчик", "Младший QA", "Старший QA"]
-stages = ["Начало", "В процессе", "Тестирование", "Завершение"]
-male_images = [
-    "https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663110850_6-mykaleidoscope-ru-p-spokoinii-chelovek-vkontakte-8.jpg",
-    "https://get.pxhere.com/photo/man-person-people-photography-travel-male-smile-photograph-80529.jpg",
-    "https://mtdata.ru/u3/photoD852/20501229401-0/original.jpg",
-    "https://get.pxhere.com/photo/person-girl-woman-hair-photography-portrait-model-youth-fashion-blue-lady-hairstyle-smile-long-hair-face-dress-eye-head-skin-beauty-blond-photo-shoot-brown-hair-portrait-photography-108386.jpg",
-    "https://74foto.ru/800/600/http/cdn1.flamp.ru/bc57c2126b20646180c92643db78d9f0.jpg"
-]
-female_images = [
-    "https://avatars.mds.yandex.net/i?id=1be90a756cf43d19ef403e6ea6e45434_l-4615485-images-thumbs&ref=rim&n=13&w=1080&h=1080",
-    "https://get.pxhere.com/photo/person-girl-woman-hair-photography-portrait-model-youth-fashion-blue-lady-hairstyle-smile-long-hair-face-dress-eye-head-skin-beauty-blond-photo-shoot-brown-hair-portrait-photography-108386.jpg",
-    "https://get.pxhere.com/photo/outdoor-person-girl-sun-woman-hair-white-photography-cute-summer-female-portrait-model-young-red-fashion-lady-facial-expression-hairstyle-smiling-smile-long-hair-close-up-caucasian-face-dress-happy-happiness-eye-head-skin-beauty-attractive-photo-shoot-pretty-girl-brown-hair-cute-girl-happy-girl-happy-woman-portrait-photography-supermodel-683657.jpg",
-    "https://uprostim.com/wp-content/uploads/2021/03/image062-51-scaled.jpg"
-]
-project_images = [
-    "https://i.pinimg.com/originals/b9/05/3d/b9053d873e9f69058997913e0fffca2e.png",
-    "https://gas-kvas.com/grafic/uploads/posts/2024-01/gas-kvas-com-p-simvoli-dlya-logotipov-na-prozrachnom-fone-34.png",
-    "https://russia-dropshipping.ru/800/600/http/thelawofattraction.ru/wp-content/uploads/a/c/0/ac007477e7e0d998fa4d822bc1730255.png",
-    "https://img.razrisyika.ru/kart/94/372802-logo-6.jpg",
-    "https://free-png.ru/wp-content/uploads/2020/10/Nike-logo-506c4872.png"
-]
+         "Старший frontend разработчик", "Младший QA инженер", "Старший QA инженер"]
+stages = ["Инициация", "Разработка", "Тестирование", "Завершение"]
+
+# Функция для генерации аватара и конвертации в Base64
+def generate_avatar_base64(name):
+    # Кодируем имя для использования в URL
+    encoded_name = urllib.parse.quote(name)
+    # Используем DiceBear API для генерации SVG аватара
+    avatar_url = f"https://api.dicebear.com/8.x/initials/svg?seed={encoded_name}"
+    try:
+        response = requests.get(avatar_url)
+        response.raise_for_status()
+        # Конвертируем SVG в Base64
+        avatar_base64 = base64.b64encode(response.content).decode('utf-8')
+        return avatar_base64
+    except requests.RequestException as e:
+        print(f"Ошибка при загрузке аватара для {name}: {e}")
+        # Возвращаем запасной Base64 (пустой аватар)
+        return "PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjY2NjYyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9IjAuM2VtIj5OPkE8L3RleHQ+PC9zdmc+"
+
+# Функция для создания рейтинга с учётом просроченных и завершённых проектов
+def generate_rating(num_projects):
+    rating = [0]  # Начальное значение рейтинга
+    overdue_count = 0
+    for _ in range(num_projects - 1):  # Генерируем оставшиеся проекты
+        # Случайно определяем, просрочен ли проект (50% шанс)
+        if choice([True, False]):
+            rating.append(rating[-1]-1)
+            overdue_count += 1
+        else:
+            rating.append(rating[-1]+1)
+    return rating, overdue_count
 
 # Создание компании
 cursor.execute("""
     INSERT INTO company (name, positions, image, description)
     VALUES (%s, %s::text[], %s, %s)
     RETURNING id
-""", ("IT Компания", roles, fake.image_url(), fake.text()))
+""", ("ООО ТехноИнновации", roles, generate_avatar_base64("ТехноИнновации"), fake.text(max_nb_chars=200)))
 company_id = cursor.fetchone()[0]
 
-# Функция для создания сотрудников
+# Функция для создания сотрудника с учётом рейтинга и проектов
 def create_employee(company_id):
     name = fake.first_name()
     surname = fake.last_name()
+    full_name = f"{name} {surname}"
     role = choice(roles)
     email = f"{name.lower()}.{surname.lower()}@{fake.domain_name()}"
-    image = choice(male_images if fake.random_int(0, 1) == 0 else female_images)
+    # Генерируем количество завершённых проектов (от 1 до 10)
+    num_completed_projects = randint(1, 10)
+    rating, overdue_count = generate_rating(num_completed_projects)
+    avatar_base64 = generate_avatar_base64(full_name)
     cursor.execute("""
-        INSERT INTO employee (company_id, name, position, mail, password, salt, image, rating, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO employee (company_id, name, position, mail, password, salt, image, rating, 
+                             active_projects_count, overdue_projects_count, total_projects_count, 
+                             created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
-    """, (company_id, f"{name} {surname}", f'"{role}"', email, fake.password(), fake.md5(), image,
-          round(fake.pyfloat(min_value=0, max_value=5, right_digits=2), 2), fake.date_time_this_year(),
-          fake.date_time_this_year()))
+    """, (company_id, full_name, role, email, fake.password(), fake.md5(),
+          avatar_base64, rating,
+          0,  # active_projects_count (0 по умолчанию, обновляется триггером)
+          overdue_count,  # overdue_projects_count
+          num_completed_projects,  # total_projects_count
+          fake.date_time_this_year(), fake.date_time_this_year()))
     return cursor.fetchone()[0]
 
-# Создание сотрудников
-employee_ids = [create_employee(company_id) for _ in range(70)]
+# Создание 20 сотрудников
+employee_ids = [create_employee(company_id) for _ in range(20)]
 
-# Функция для создания проектов
+# Функция для создания проекта
 def create_project(company_id):
     project_name = fake.catch_phrase()
     deadline = fake.date_time_between(start_date='+30d', end_date='+90d')
-    image = choice(project_images)
+    avatar_base64 = generate_avatar_base64(project_name)
+    # Случайный статус (0 - завершён, 1 - активен)
+    status = randint(0, 1)
     cursor.execute("""
         INSERT INTO project (company_id, name, stages, image, description, current_stage, deadline, status, complexity, created_at, updated_at)
         VALUES (%s, %s, %s::text[], %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
-    """, (company_id, project_name, stages, image, fake.text(), randint(0, 3), deadline, randint(0, 1),
+    """, (company_id, project_name, stages, avatar_base64,
+          fake.text(max_nb_chars=200), randint(0, 3), deadline, status,
           randint(1, 10), fake.date_time_this_year(), fake.date_time_this_year()))
     return cursor.fetchone()[0]
 
-# Создание проектов и назначение сотрудников
-for _ in range(30):  # Увеличено количество проектов до 30
-    project_id = create_project(company_id)
+# Создание 10 проектов
+project_ids = [create_project(company_id) for _ in range(10)]
+
+# Назначение сотрудников на проекты
+employee_project_assignments = {emp_id: [] for emp_id in employee_ids}
+active_project_count = {}  # Для отслеживания активных проектов
+for project_id in project_ids:
+    cursor.execute("SELECT status, deadline FROM project WHERE id = %s", (project_id,))
+    status, deadline = cursor.fetchone()
+    # Назначаем 3-5 случайных сотрудников на каждый проект
     assigned_employees = sample(employee_ids, randint(3, 5))
     for emp_id in assigned_employees:
+        cursor.execute("""
+            INSERT INTO employee_project (project_id, employee_id)
+            VALUES (%s, %s)
+        """, (project_id, emp_id))
+        employee_project_assignments[emp_id].append(project_id)
+        if status == 1:  # Проект активен
+            active_project_count[emp_id] = active_project_count.get(emp_id, 0) + 1
+
+# Обновление active_projects_count для сотрудников
+for emp_id, count in active_project_count.items():
+    cursor.execute("""
+        UPDATE employee SET active_projects_count = %s WHERE id = %s
+    """, (count, emp_id))
+
+# Проверка и назначение проектов для сотрудников, у которых нет проектов
+for emp_id in employee_ids:
+    if not employee_project_assignments[emp_id]:
+        project_id = choice(project_ids)
         cursor.execute("""
             INSERT INTO employee_project (project_id, employee_id)
             VALUES (%s, %s)
