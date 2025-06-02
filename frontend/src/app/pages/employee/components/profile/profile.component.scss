@@ -1,38 +1,79 @@
 .employee-details {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start; /* Чтобы блоки .employee-info и .actions были выровнены по верхнему краю */
+  flex-direction: row;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px; /* Ограничим общую ширину */
+  margin: 0 auto; /* Центрируем контейнер */
+  gap: 20px; /* Расстояние между колонками */
 
-  .employee-info {
+  .left-column {
     display: flex;
-    flex-direction: column; /* Располагаем элементы в колонку */
+    flex-direction: column;
+    flex: 1; /* Занимает доступное пространство */
+    min-width: 0; /* Предотвращает переполнение */
 
-    .employee-image {
-      width: 500px;
-      border-radius: 5px;
+    .employee-image-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      .employee-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
     }
 
-    form {
-      display: grid;
-      grid-template-columns: max-content 1fr; /* Определяем две колонки: первая для меток, вторая для инпутов */
-      gap: 10px; /* Отступ между элементами формы */
+    .employee-info {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
 
-      label {
-        align-self: center; /* Выравниваем метки по центру по вертикали */
-      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
 
-      input[type="text"] {
-        width: 100%; /* Занимаем всю доступную ширину */
-      }
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
 
-      p {
-        margin: 5px 0;
+          label {
+            font-weight: bold;
+          }
+
+          input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          }
+        }
+
+        p {
+          margin: 5px 0;
+        }
       }
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
     }
   }
 
-  .actions {
-    display: flex;
-    margin: 10px;
+  .chart-container {
+    flex: 0 0 500px; /* Фиксированная ширина графика */
+    height: 300px;
+
+    @media (max-width: 768px) {
+      flex: 1 1 100%; /* На узких экранах график занимает всю ширину */
+      order: 1; /* Перемещаем график вниз */
+    }
   }
 }

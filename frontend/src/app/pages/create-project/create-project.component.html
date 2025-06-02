@@ -18,10 +18,22 @@
   </div>
   <div class="p-field">
     <label for="stages">Стадии проекта</label>
-    <div id="stages" *ngFor="let stage of project.stages; let i = index">
-      <input type="text" [(ngModel)]="project.stages[i]" pInputText/>
-      <button type="button" pButton icon="pi pi-minus" (click)="removeStage(i)" class="p-button-danger"
-              *ngIf="project.stages.length > 1"></button>
+    <div *ngFor="let stage of project.stages; let i = index; trackBy: trackByIndex" class="stage-row">
+      <input
+        type="text"
+        [(ngModel)]="project.stages[i]"
+        pInputText
+        [ngModelOptions]="{name: 'stage-' + i}"
+        placeholder="Введите стадию"
+      />
+      <button
+        type="button"
+        pButton
+        icon="pi pi-minus"
+        (click)="removeStage(i)"
+        class="p-button-danger"
+        *ngIf="project.stages.length > 1"
+      ></button>
     </div>
     <button type="button" (click)="addStage()" pButton label="Добавить стадию"></button>
   </div>

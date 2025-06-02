@@ -19,6 +19,7 @@ import {ProjectsComponent} from "./projects/projects.component";
 import {CreateProjectComponent} from './create-project/create-project.component';
 import {InputNumberModule} from "primeng/inputnumber";
 import {DropdownModule} from 'primeng/dropdown';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import {DropdownModule} from 'primeng/dropdown';
         CheckboxModule,
         InputNumberModule,
         DropdownModule,
+        NgChartsModule,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: "ru-RU"},

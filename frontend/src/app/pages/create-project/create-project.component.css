@@ -3,16 +3,28 @@
   margin-left: 90px;
   margin-right: 90px;
 
+  #stages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #stages input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
   #employees {
     display: flex;
     align-items: start;
-    gap: 5px; /* Отступ между элементами */
+    gap: 5px;
   }
 
   .buttons {
     display: flex;
     align-items: start;
-    gap: 10px; /* Отступ между элементами */
+    gap: 10px;
   }
 
   .fixed-button {
@@ -20,6 +32,22 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    /*z-index: 9999;*/
   }
+}
+
+.stage-row {
+  display: flex;
+  align-items: center; /* Вертикальное выравнивание */
+  gap: 10px; /* Отступ между input и button */
+  margin-bottom: 10px; /* Отступ между строками */
+}
+
+.stage-row input {
+  flex: 1; /* Input занимает доступное пространство */
+  padding: 8px;
+}
+
+.stage-row button {
+  flex-shrink: 0; /* Кнопка не сжимается */
+  min-width: 40px; /* Минимальная ширина кнопки */
 }

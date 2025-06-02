@@ -1,11 +1,14 @@
 <div class="card" [routerLink]="['/employee', employee.id]">
-  <img [src]="employee.image" alt="{{employee.name}}" class="card-image">
+  <img [src]="employee.image ? 'data:image/svg+xml;base64,' + employee.image : 'assets/placeholder.svg'" alt="{{employee.name}}" class="card-image">
   <div class="card-content">
-    <h4>{{employee.name}}</h4>
-    <p>{{employee.position}}</p>
-    <p>Email: {{employee.mail}}</p>
-    <p>Active Projects: {{employee.active_projects_count}}</p>
-    <p>Total Projects: {{employee.total_projects_count}}</p>
-    <!-- Add more fields as needed -->
+    <div class="card-header">
+      <h4 class="card-title">{{employee.name}}</h4>
+    </div>
+    <div class="card-details">
+      <p><span class="label">Должность:</span> <span class="value">{{employee.position}}</span></p>
+      <p><span class="label">Email:</span> <span class="value">{{employee.mail}}</span></p>
+      <p><span class="label">Активные проекты:</span> <span class="value">{{employee.active_projects_count}}</span></p>
+      <p><span class="label">Всего проектов:</span> <span class="value">{{employee.total_projects_count}}</span></p>
+    </div>
   </div>
 </div>

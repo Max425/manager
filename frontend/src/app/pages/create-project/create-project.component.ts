@@ -1,52 +1,61 @@
-import {Component, OnInit} from '@angular/core';
-import {Project} from "../../shared/models/entity/project";
-import {CreateProjectService} from "./services/create-project.service";
-import {firstValueFrom} from "rxjs";
-import {Company} from "../../shared/models/entity/company";
-import {AutoEmployee} from "../../shared/models/entity/auto-employee";
-import {Employee} from "../../shared/models/entity/employee";
-import {AutoEmployees} from "../../shared/models/entity/auto-employees";
+import { Component, OnInit } from '@angular/core';
+import { Project } from '../../shared/models/entity/project';
+import { CreateProjectService } from './services/create-project.service';
+import { firstValueFrom } from 'rxjs';
+import { Company } from '../../shared/models/entity/company';
+import { AutoEmployee } from '../../shared/models/entity/auto-employee';
+import { Employee } from '../../shared/models/entity/employee';
+import { AutoEmployees } from '../../shared/models/entity/auto-employees';
 
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
-  styleUrls: ['./create-project.component.css']
+  styleUrls: ['./create-project.component.css'],
 })
 export class CreateProjectComponent implements OnInit {
   project: Project = {
-    company_id: 0, current_stage: 1, id: 0, image: "", status: 1,
+    company_id: 0,
+    current_stage: 1,
+    id: 0,
+    image: '',
+    status: 1,
     complexity: 0,
     deadline: '',
     description: '',
     name: '',
-    stages: ['']
+    stages: [''],
   };
-  choosePositions: AutoEmployee[] = [{position: '', employee: undefined, pin: false}];
+  choosePositions: AutoEmployee[] = [{ position: '', employee: undefined, pin: false }];
   company!: Company;
   employees: Employee[] = [];
 
-  constructor(private api: CreateProjectService) {
-  }
+  constructor(private api: CreateProjectService) {}
 
   async ngOnInit(): Promise<void> {
-    await this.getCompany();
-    this.employees = await firstValueFrom(this.api.getEmployees());
+    try {
+      await this.getCompany();
+      this.employees = await firstValueFrom(this.api.getEmployees());
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+    }
   }
 
   public async getCompany() {
-    this.company = await firstValueFrom((this.api.getCompany()));
+    this.company = await firstValueFrom(this.api.getCompany());
   }
 
   addStage(): void {
-    this.project.stages.push('');
+    this.project.stages = [...this.project.stages, ''];
+    console.log('Стадии после добавления:', this.project.stages);
   }
 
   removeStage(index: number): void {
-    this.project.stages.splice(index, 1);
+    this.project.stages = this.project.stages.filter((_, i) => i !== index);
+    console.log('Стадии после удаления:', this.project.stages);
   }
 
   addPositions(): void {
-    this.choosePositions.push({position: '', employee: undefined, pin: false});
+    this.choosePositions.push({ position: '', employee: undefined, pin: false });
   }
 
   removePositions(index: number): void {
@@ -54,30 +63,35 @@ export class CreateProjectComponent implements OnInit {
   }
 
   chooseEmployees(index: number) {
-    return this.employees
-      .filter(e =>
-        this.choosePositions[index].position.length < 1
-        || e.position === this.choosePositions[index].position);
+    return this.employees.filter(
+      (e) =>
+        this.choosePositions[index].position.length < 1 ||
+        e.position === this.choosePositions[index].position
+    );
   }
 
   autoChooseEmployees() {
     let auto: AutoEmployees = {
       project: this.project,
-      auto_employee: this.choosePositions
+      auto_employee: this.choosePositions,
     };
-    this.api.autoChooseEmployees(auto).subscribe(data => {
+    this.api.autoChooseEmployees(auto).subscribe((data) => {
       this.choosePositions = data;
-    })
+    });
   }
 
   createProject(): void {
     console.log(this.project);
-    this.api.createProject(this.project).subscribe(data => {
+    this.api.createProject(this.project).subscribe((data) => {
       if (data.status === 200) {
         console.log(`status: ${data.status}\nmessage: ${data}`);
       } else {
         console.log(`status: ${data.status}\nmessage: ${data}`);
       }
     });
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }

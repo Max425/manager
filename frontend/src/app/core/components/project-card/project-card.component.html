@@ -1,12 +1,15 @@
-<div class="card" [routerLink]="['/project', project.id]"> <!-- Изменение ссылки на проект -->
-  <img [src]="project.image" alt="{{project.name}}" class="card-image"> <!-- Использование свойств проекта -->
+<div class="card" [routerLink]="['/project', project.id]">
+  <img [src]="project.image ? 'data:image/svg+xml;base64,' + project.image : 'assets/placeholder.svg'" alt="{{project.name}}" class="card-image">
   <div class="card-content">
-    <h4>{{project.name}}</h4>
-    <p>Description: {{project.description}}</p> <!-- Описание проекта -->
-    <p>Complexity: {{project.complexity}}</p> <!-- Сложность проекта -->
-    <p>Current Stage: {{project.current_stage}}</p> <!-- Текущий этап проекта -->
-    <p>Deadline: {{project.deadline}}</p> <!-- Срок завершения проекта -->
-    <p>Status: {{project.status}}</p> <!-- Статус проекта -->
-    <!-- Добавьте другие поля по мере необходимости -->
+    <div class="card-header">
+      <h4 class="card-title">{{project.name}}</h4>
+      <p class="card-description">Описание: {{project.description | slice:0:100}}{{project.description.length > 100 ? '...' : ''}}</p>
+    </div>
+    <div class="card-details">
+      <p><span class="label">Сложность:</span> <span class="value">{{project.complexity}}</span></p>
+      <p><span class="label">Текущий этап:</span> <span class="value">{{project.current_stage}}</span></p>
+      <p><span class="label">Срок:</span> <span class="value">{{project.deadline | date:'medium'}}</span></p>
+      <p><span class="label">Статус:</span> <span class="value">{{project.status === 1 ? 'Активен' : 'Завершен'}}</span></p>
+    </div>
   </div>
 </div>

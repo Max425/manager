@@ -7,6 +7,6 @@ export interface Employee {
   name: string;
   overdue_projects_count: number;
   position: string;
-  rating: number;
+  rating: number[];
   total_projects_count: number;
 }
