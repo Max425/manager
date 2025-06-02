@@ -49,6 +49,23 @@ export class ProfileComponent implements OnInit, OnChanges {
     }
   };
 
+  // Круговая диаграмма (проекты)
+  public pieChartData: ChartData<'pie'> = {
+    labels: ['Открытые', 'Закрытые вовремя', 'Просроченные'],
+    datasets: [{
+      data: [],
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      hoverOffset: 4
+    }]
+  };
+  public pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { enabled: true }
+    }
+  };
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -56,42 +73,44 @@ export class ProfileComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    // Начальная инициализация, если employee уже доступен
     this.updateChartData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Реагируем на изменения employee
     if (changes['employee'] && changes['employee'].currentValue) {
       this.employee = changes['employee'].currentValue;
-      this.originalEmployee = { ...this.employee }; // Сохраняем оригинал для отмены
+      this.originalEmployee = { ...this.employee };
       this.updateChartData();
     }
   }
 
   private updateChartData(): void {
+    console.log('Employee:', this.employee);
     if (this.employee && this.employee.rating && this.employee.rating.length > 0) {
-      // Вычисляем кумулятивный рейтинг для оси Y
-      const cumulativeRating = this.employee.rating.reduce((acc, curr, index) => {
-        acc.push(curr);
-        return acc;
-      }, [] as number[]);
-
-      // Создаём метки для оси X (равные промежутки)
-      const labels = this.employee.rating.map((_, index) => `${index + 1}`);
-
-      // Обновляем данные графика
+      // Линейный график: исходные значения рейтинга
+      const data = [...this.employee.rating];
+      const labels = this.employee.rating.map((_, index) => `Проект ${index + 1}`);
       this.lineChartData = {
         labels: labels,
-        datasets: [
-          {
-            ...this.lineChartData.datasets[0],
-            data: cumulativeRating
-          }
-        ]
+        datasets: [{ ...this.lineChartData.datasets[0], data: data }]
       };
     } else {
-      console.log('Данные для графика отсутствуют:', this.employee?.rating);
+      console.log('Данные для линейного графика отсутствуют:', this.employee?.rating);
+    }
+
+    // Круговая диаграмма: соотношение проектов
+    if (this.employee && this.employee.total_projects_count !== undefined) {
+      const completedOnTime = this.employee.total_projects_count - this.employee.overdue_projects_count - this.employee.active_projects_count;
+      const active = this.employee.active_projects_count || 0;
+      this.pieChartData = {
+        labels: ['Активные', 'Закрытые вовремя', 'Просроченные'],
+        datasets: [{
+          ...this.pieChartData.datasets[0],
+          data: [active, completedOnTime, this.employee.overdue_projects_count]
+        }]
+      };
+    } else {
+      console.log('Данные для круговой диаграммы отсутствуют:', this.employee);
     }
   }
 

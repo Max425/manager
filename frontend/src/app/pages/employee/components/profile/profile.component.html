@@ -36,10 +36,18 @@
 
   <!-- График справа -->
   <div class="chart-container">
+    <!-- Линейный график -->
     <canvas baseChart
             [data]="lineChartData"
             [options]="lineChartOptions"
             [type]="'line'">
+    </canvas>
+
+    <!-- Круговая диаграмма -->
+    <canvas baseChart
+            [data]="pieChartData"
+            [options]="pieChartOptions"
+            [type]="'pie'">
     </canvas>
   </div>
 </div>

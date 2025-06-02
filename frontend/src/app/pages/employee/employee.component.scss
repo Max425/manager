@@ -3,6 +3,7 @@
   flex-direction: row;
   height: 100%;
   width: 100%;
+  gap: 500px; /* Добавляем 200px между app-employee-profile и .card-container */
 
   .card-container {
     display: flex;

@@ -16,22 +16,25 @@ export class ProjectsComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getEmployees();
+    await this.getProjects();
   }
 
-  public async getEmployees() {
+  public async getProjects() {
     const data = await firstValueFrom(this.api.getProjects());
-    this._treeData.next(data);
-    this.filteredProjects = data;
+    // Filter active projects and sort by deadline in descending order
+    const activeSortedProjects = data
+      .filter(project => project.status === 1)
+      .sort((a, b) => new Date(b.deadline).getTime() - new Date(a.deadline).getTime());
+    this._treeData.next(activeSortedProjects);
+    this.filteredProjects = activeSortedProjects;
   }
 
   filterProjects(event: any) {
     const searchTerm = event.target.value;
     this.filteredProjects = this._treeData.value.filter(project => {
       return (
-          project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.description.toLowerCase().includes(searchTerm.toLowerCase())
-        // Add more fields as needed
+        project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
   }

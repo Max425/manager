@@ -63,6 +63,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   chooseEmployees(index: number) {
+    console.log(this.choosePositions[index].position, this.employees);
     return this.employees.filter(
       (e) =>
         this.choosePositions[index].position.length < 1 ||
